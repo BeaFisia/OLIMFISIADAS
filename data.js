@@ -1,11 +1,13 @@
-// 1. Número de atletas ativos por gerência (para o cálculo per capita)
+// 1. Número de atletas ativos por gerência e nome do arquivo do brasão
 const infoGerencias = {
-    "DS&IP": 9 // Luís, Juan, Beatriz, Raissa, Camila, Carol, Yan, Marcella e Jacqueline.
+    "DS&IP": { pessoas: 9, brasao: "nome-do-arquivo-brasao-dsip.png" },
+    "Vendas": { pessoas: 10, brasao: "nome-do-arquivo-brasao-vendas.png" },
+    "Marketing": { pessoas: 8, brasao: "nome-do-arquivo-brasao-marketing.png" },
+    "Operações": { pessoas: 15, brasao: "nome-do-arquivo-brasao-operacoes.png" }
 };
 
-// 2. Pontuação dos Atletas (Atualize os pontos aqui após as provas)
+// 2. Pontuação dos Atletas (Mantenha o ranking individual como estava)
 const atletas = [
-    // Time DS&IP
     { nome: "Luís Mattos", gerencia: "DS&IP", pontos: 0 },
     { nome: "Juan Esteban", gerencia: "DS&IP", pontos: 0 },
     { nome: "Beatriz Borges", gerencia: "DS&IP", pontos: 0 },
