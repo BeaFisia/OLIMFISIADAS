@@ -1,6 +1,6 @@
 :root {
-    --azul-corporativo: #003366;
-    --laranja-esporte: #FF6600;
+    --preto-corporativo: #323232ff;
+    --laranja-esporte: #ff500a;
     --fundo-claro: #F4F7F6;
     --texto-escuro: #333;
 }
@@ -14,7 +14,7 @@ body {
 }
 
 header {
-    background-color: var(--azul-corporativo);
+    background-color: var(--preto-corporativo);
     color: white;
     padding: 20px;
     text-align: center;
@@ -96,4 +96,17 @@ th {
     padding: 10px 15px;
     text-decoration: none;
     border-radius: 5px;
+}
+.organograma-box img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.brasao-gerencia {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
 }
