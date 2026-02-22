@@ -1,38 +1,60 @@
-// Função para trocar as abas
+/**
+ * FUNÇÃO DE NAVEGAÇÃO (CORRIGE O BUG DOS BOTÕES)
+ * Esta função é responsável por mostrar a secção clicada e esconder as outras.
+ */
 function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(tab => {
+    // Seleciona todos os conteúdos das abas
+    const tabs = document.querySelectorAll('.tab-content');
+    
+    // Remove a classe 'active' de todas as abas
+    tabs.forEach(tab => {
         tab.classList.remove('active');
     });
-    document.getElementById(tabId).classList.add('active');
+
+    // Adiciona a classe 'active' apenas à aba que foi clicada
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    } else {
+        console.error("[Erro] Aba não encontrada: " + tabId);
+    }
 }
 
-// Inicializa a página
+/**
+ * INICIALIZAÇÃO
+ * Executa as funções assim que a página é carregada.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     renderCalendario();
     renderRankings();
 });
 
-// Calcula Status Baseado na Data
+/**
+ * LÓGICA DO CALENDÁRIO
+ */
 function getStatus(dataAtividade) {
     const hoje = new Date().toISOString().split('T')[0];
-    if (dataAtividade < hoje) return '<span class="status-done">Done</span>';
-    if (dataAtividade === hoje) return '<span class="status-progress">In Progress</span>';
-    return '<span class="status-not-started">Not Started</span>';
+    if (dataAtividade < hoje) return '<span class="status-done">Concluído</span>';
+    if (dataAtividade === hoje) return '<span class="status-progress">Em Curso</span>';
+    return '<span class="status-not-started">Agendado</span>';
 }
 
-// Renderiza o Calendário
 function renderCalendario() {
     const tbody = document.getElementById('corpo-calendario');
-    tbody.innerHTML = ''; // Limpa a tabela
-    calendario.sort((a, b) => new Date(a.data) - new Date(b.data)); 
+    if (!tbody) return;
 
-    calendario.forEach(ativ => {
+    tbody.innerHTML = '';
+    // Ordena por data (mais recente primeiro)
+    const calendarioOrdenado = [...calendario].sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    calendarioOrdenado.forEach(ativ => {
         const dataFormatada = ativ.data.split('-').reverse().join('/');
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${dataFormatada}</td>
             <td><strong>${ativ.nome}</strong><br><small>(${ativ.tipo})</small></td>
             <td>${ativ.descricao}</td>
+            <td>${ativ.tipo === 'Engajamento' ? '2 pts' : 'Participação + Bónus'}</td>
             <td>${ativ.local}</td>
             <td>${getStatus(ativ.data)}</td>
         `;
@@ -40,101 +62,74 @@ function renderCalendario() {
     });
 }
 
-// Renderiza os Rankings (Individuais e Gerências)
+/**
+ * LÓGICA DOS RANKINGS (INDIVIDUAL E GERÊNCIAS)
+ */
 function renderRankings() {
-    // 1. Ordenar e Renderizar Atletas (Maior para Menor baseado no Total)
-    const atletasOrdenados = [...atletas].sort((a, b) => b.pontosTotal - a.pontosTotal);
+    // 1. RANKING INDIVIDUAL (ATLETAS)
     const tbodyAtletas = document.getElementById('corpo-atletas');
-    tbodyAtletas.innerHTML = ''; 
-    
-    atletasOrdenados.forEach((atleta, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${index + 1}º</td>
-            <td>${atleta.nome}</td>
-            <td>${atleta.gerencia || "Sem Gerência"}</td>
-            <td>${atleta.pontosIntegracao}</td>
-            <td><strong>${atleta.pontosTotal}</strong></td>
-        `;
-        tbodyAtletas.appendChild(tr);
-    });
+    if (tbodyAtletas) {
+        tbodyAtletas.innerHTML = '';
+        // Ordena pelo Ranking TOTAL (maior para menor)
+        const atletasOrdenados = [...atletas].sort((a, b) => b.pontosTotal - a.pontosTotal);
 
-    // 2. Calcular e Renderizar Gerências com BRASÕES
-    const somaGerencias = {};
-    
-    atletas.forEach(atleta => {
-        // Ignora atletas que ainda não tiveram a gerência preenchida no data.js para não gerar erros
-        if (!atleta.gerencia) return;
+        atletasOrdenados.forEach((atleta, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}º</td>
+                <td>${atleta.nome}</td>
+                <td>${atleta.gerencia || "---"}</td>
+                <td>${atleta.pontosIntegracao}</td>
+                <td><strong>${atleta.pontosTotal}</strong></td>
+            `;
+            tbodyAtletas.appendChild(tr);
+        });
+    }
 
-        if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
-        // A pontuação da gerência utiliza a pontuação TOTAL do atleta
-        somaGerencias[atleta.gerencia] += atleta.pontosTotal;
-    });
-
-    const rankingGerencias = Object.keys(somaGerencias).map(gerencia => {
-        const totalPontos = somaGerencias[gerencia];
-        
-        const info = infoGerencias[gerencia] || { pessoas: 1, brasao: "" };
-        const numAtletas = info.pessoas;
-        const imgBrasao = info.brasao;
-        
-        const pontosPerCapita = (totalPontos / numAtletas).toFixed(2);
-        return { gerencia, pontosPerCapita: parseFloat(pontosPerCapita), brasao: imgBrasao };
-    });
-
-    rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
-
+    // 2. RANKING DAS GERÊNCIAS (PER CAPITA)
     const tbodyGerencias = document.getElementById('corpo-gerencias');
-    tbodyGerencias.innerHTML = ''; 
-    
-    rankingGerencias.forEach((g, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${index + 1}º</td>
-            <td>
-                <img src="${g.brasao}" alt="Brasão" class="brasao-gerencia">
-                ${g.gerencia}
-            </td>
-            <td>${g.pontosPerCapita}</td>
-        `;
-        tbodyGerencias.appendChild(tr);
-    });
-}
-    // 2. Calcular e Renderizar Gerências com BRASÕES
-    const somaGerencias = {};
-    
-    atletas.forEach(atleta => {
-        if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
-        somaGerencias[atleta.gerencia] += atleta.pontos;
-    });
-
-    const rankingGerencias = Object.keys(somaGerencias).map(gerencia => {
-        const totalPontos = somaGerencias[gerencia];
+    if (tbodyGerencias) {
+        tbodyGerencias.innerHTML = '';
         
-        // Busca as informações da gerência (pessoas e brasão). Se não achar, usa valores padrão.
-        const info = infoGerencias[gerencia] || { pessoas: 1, brasao: "" };
-        const numAtletas = info.pessoas;
-        const imgBrasao = info.brasao;
+        const somaGerencias = {};
         
-        const pontosPerCapita = (totalPontos / numAtletas).toFixed(2);
-        return { gerencia, pontosPerCapita: parseFloat(pontosPerCapita), brasao: imgBrasao };
-    });
+        // Acumula os pontos totais por gerência
+        atletas.forEach(atleta => {
+            if (atleta.gerencia) {
+                if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
+                somaGerencias[atleta.gerencia] += atleta.pontosTotal;
+            }
+        });
 
-    rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
+        // Calcula a média per capita usando infoGerencias do data.js
+        const rankingGerencias = Object.keys(somaGerencias).map(nomeG => {
+            const pontosG = somaGerencias[nomeG];
+            const info = infoGerencias[nomeG] || { pessoas: 1, brasao: "" };
+            const perCapita = (pontosG / info.pessoas).toFixed(2);
+            return { 
+                nome: nomeG, 
+                pontosPerCapita: parseFloat(perCapita), 
+                brasao: info.brasao 
+            };
+        });
 
-    const tbodyGerencias = document.getElementById('corpo-gerencias');
-    tbodyGerencias.innerHTML = ''; // Limpa a tabela
-    
-    rankingGerencias.forEach((g, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${index + 1}º</td>
-            <td>
-                <img src="${g.brasao}" alt="Brasão" class="brasao-gerencia">
-                ${g.gerencia}
-            </td>
-            <td>${g.pontosPerCapita}</td>
-        `;
-        tbodyGerencias.appendChild(tr);
-    });
+        // Ordena do maior para o menor per capita
+        rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
+
+        rankingGerencias.forEach((g, index) => {
+            const tr = document.createElement('tr');
+            // [Inferência] O uso do onerror na imagem serve para evitar o ícone de "imagem partida" caso o arquivo não exista no GitHub.
+            tr.innerHTML = `
+                <td>${index + 1}º</td>
+                <td>
+                    <img src="${g.brasao}" class="brasao-gerencia" 
+                         onerror="this.style.display='none'" 
+                         alt="">
+                    ${g.nome}
+                </td>
+                <td><strong>${g.pontosPerCapita}</strong></td>
+            `;
+            tbodyGerencias.appendChild(tr);
+        });
+    }
 }
