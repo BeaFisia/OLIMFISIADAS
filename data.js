@@ -1,9 +1,11 @@
 // 1. Número de atletas ativos por gerência e nome do arquivo do brasão
 const infoGerencias = {
-    "DS&IP": { pessoas: 9, brasao: "nome-do-arquivo-brasao-dsip.png" },
-    "Vendas": { pessoas: 10, brasao: "nome-do-arquivo-brasao-vendas.png" },
-    "Marketing": { pessoas: 8, brasao: "nome-do-arquivo-brasao-marketing.png" },
-    "Operações": { pessoas: 15, brasao: "nome-do-arquivo-brasao-operacoes.png" }
+    "DS&IP": { pessoas: 9, brasao: "DS&IP" },
+    "WHOLESALE": { pessoas: 5, brasao: "whsl" },
+    "IBP": { pessoas: 6, brasao: "IBP" },
+    "MPO": { pessoas: 15, brasao: "MPO" }
+    "NIKE STORES": { pessoas: 13, brasao: "NDS" }
+    "NDDC": { pessoas: 9, brasao: "nddc" }
 };
 
 // 2. Pontuação dos Atletas (Mantenha o ranking individual como estava)
