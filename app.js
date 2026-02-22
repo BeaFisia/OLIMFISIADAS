@@ -42,22 +42,64 @@ function renderCalendario() {
 
 // Renderiza os Rankings (Individuais e Gerências)
 function renderRankings() {
-    // 1. Ordenar e Renderizar Atletas (Maior para Menor - Mantido exatamente igual)
-    const atletasOrdenados = [...atletas].sort((a, b) => b.pontos - a.pontos);
+    // 1. Ordenar e Renderizar Atletas (Maior para Menor baseado no Total)
+    const atletasOrdenados = [...atletas].sort((a, b) => b.pontosTotal - a.pontosTotal);
     const tbodyAtletas = document.getElementById('corpo-atletas');
-    tbodyAtletas.innerHTML = ''; // Limpa a tabela
+    tbodyAtletas.innerHTML = ''; 
     
     atletasOrdenados.forEach((atleta, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${index + 1}º</td>
             <td>${atleta.nome}</td>
-            <td>${atleta.gerencia}</td>
-            <td>${atleta.pontos}</td>
+            <td>${atleta.gerencia || "Sem Gerência"}</td>
+            <td>${atleta.pontosIntegracao}</td>
+            <td><strong>${atleta.pontosTotal}</strong></td>
         `;
         tbodyAtletas.appendChild(tr);
     });
 
+    // 2. Calcular e Renderizar Gerências com BRASÕES
+    const somaGerencias = {};
+    
+    atletas.forEach(atleta => {
+        // Ignora atletas que ainda não tiveram a gerência preenchida no data.js para não gerar erros
+        if (!atleta.gerencia) return;
+
+        if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
+        // A pontuação da gerência utiliza a pontuação TOTAL do atleta
+        somaGerencias[atleta.gerencia] += atleta.pontosTotal;
+    });
+
+    const rankingGerencias = Object.keys(somaGerencias).map(gerencia => {
+        const totalPontos = somaGerencias[gerencia];
+        
+        const info = infoGerencias[gerencia] || { pessoas: 1, brasao: "" };
+        const numAtletas = info.pessoas;
+        const imgBrasao = info.brasao;
+        
+        const pontosPerCapita = (totalPontos / numAtletas).toFixed(2);
+        return { gerencia, pontosPerCapita: parseFloat(pontosPerCapita), brasao: imgBrasao };
+    });
+
+    rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
+
+    const tbodyGerencias = document.getElementById('corpo-gerencias');
+    tbodyGerencias.innerHTML = ''; 
+    
+    rankingGerencias.forEach((g, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${index + 1}º</td>
+            <td>
+                <img src="${g.brasao}" alt="Brasão" class="brasao-gerencia">
+                ${g.gerencia}
+            </td>
+            <td>${g.pontosPerCapita}</td>
+        `;
+        tbodyGerencias.appendChild(tr);
+    });
+}
     // 2. Calcular e Renderizar Gerências com BRASÕES
     const somaGerencias = {};
     
