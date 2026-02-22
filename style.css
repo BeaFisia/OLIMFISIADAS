@@ -1,0 +1,99 @@
+:root {
+    --azul-corporativo: #003366;
+    --laranja-esporte: #FF6600;
+    --fundo-claro: #F4F7F6;
+    --texto-escuro: #333;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--fundo-claro);
+    color: var(--texto-escuro);
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: var(--azul-corporativo);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header nav {
+    margin-top: 15px;
+}
+
+header button {
+    background-color: var(--laranja-esporte);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+header button:hover {
+    background-color: #e65c00;
+}
+
+main {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--azul-corporativo);
+    color: white;
+}
+
+.status-done { color: green; font-weight: bold; }
+.status-progress { color: orange; font-weight: bold; }
+.status-not-started { color: gray; font-weight: bold; }
+
+.alerta-upload {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.btn-upload {
+    display: inline-block;
+    background-color: var(--azul-corporativo);
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
