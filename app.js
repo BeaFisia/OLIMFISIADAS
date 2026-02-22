@@ -23,10 +23,10 @@ function getStatus(dataAtividade) {
 // Renderiza o Calendário
 function renderCalendario() {
     const tbody = document.getElementById('corpo-calendario');
-    calendario.sort((a, b) => new Date(a.data) - new Date(b.data)); // Ordena por data
+    tbody.innerHTML = ''; // Limpa a tabela
+    calendario.sort((a, b) => new Date(a.data) - new Date(b.data)); 
 
     calendario.forEach(ativ => {
-        // Converte formato YYYY-MM-DD para DD/MM/YYYY
         const dataFormatada = ativ.data.split('-').reverse().join('/');
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -42,9 +42,10 @@ function renderCalendario() {
 
 // Renderiza os Rankings (Individuais e Gerências)
 function renderRankings() {
-    // 1. Ordenar e Renderizar Atletas (Maior para Menor)
+    // 1. Ordenar e Renderizar Atletas (Maior para Menor - Mantido exatamente igual)
     const atletasOrdenados = [...atletas].sort((a, b) => b.pontos - a.pontos);
     const tbodyAtletas = document.getElementById('corpo-atletas');
+    tbodyAtletas.innerHTML = ''; // Limpa a tabela
     
     atletasOrdenados.forEach((atleta, index) => {
         const tr = document.createElement('tr');
@@ -57,32 +58,39 @@ function renderRankings() {
         tbodyAtletas.appendChild(tr);
     });
 
-    // 2. Calcular e Renderizar Gerências
+    // 2. Calcular e Renderizar Gerências com BRASÕES
     const somaGerencias = {};
     
-    // Somar pontos por gerência
     atletas.forEach(atleta => {
         if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
         somaGerencias[atleta.gerencia] += atleta.pontos;
     });
 
-    // Calcular "Per Capita" e colocar em array
     const rankingGerencias = Object.keys(somaGerencias).map(gerencia => {
         const totalPontos = somaGerencias[gerencia];
-        const numAtletas = infoGerencias[gerencia] || 1; // Evita divisão por zero
+        
+        // Busca as informações da gerência (pessoas e brasão). Se não achar, usa valores padrão.
+        const info = infoGerencias[gerencia] || { pessoas: 1, brasao: "" };
+        const numAtletas = info.pessoas;
+        const imgBrasao = info.brasao;
+        
         const pontosPerCapita = (totalPontos / numAtletas).toFixed(2);
-        return { gerencia, pontosPerCapita: parseFloat(pontosPerCapita) };
+        return { gerencia, pontosPerCapita: parseFloat(pontosPerCapita), brasao: imgBrasao };
     });
 
-    // Ordenar gerências
     rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
 
     const tbodyGerencias = document.getElementById('corpo-gerencias');
+    tbodyGerencias.innerHTML = ''; // Limpa a tabela
+    
     rankingGerencias.forEach((g, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${index + 1}º</td>
-            <td>${g.gerencia}</td>
+            <td>
+                <img src="${g.brasao}" alt="Brasão" class="brasao-gerencia">
+                ${g.gerencia}
+            </td>
             <td>${g.pontosPerCapita}</td>
         `;
         tbodyGerencias.appendChild(tr);
