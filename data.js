@@ -1,25 +1,24 @@
-// DADOS FICTÍCIOS PARA VOCÊ EDITAR Facilmente
-
-// 1. Número de atletas ativos por gerência (para cálculo per capita)
+// 1. Número de atletas ativos por gerência (para o cálculo per capita)
 const infoGerencias = {
-    "Vendas": 10,
-    "Marketing": 8,
-    "Operações": 15
+    "DS&IP": 9 // Luís, Juan, Beatriz, Raissa, Camila, Carol, Yan, Marcella e Jacqueline.
 };
 
-// 2. Pontuação dos Atletas (Atualize isso após cada prova)
+// 2. Pontuação dos Atletas (Atualize os pontos aqui após as provas)
 const atletas = [
-    { nome: "Ana Silva", gerencia: "Vendas", pontos: 120 },
-    { nome: "Carlos Mendes", gerencia: "Vendas", pontos: 85 },
-    { nome: "Beatriz Souza", gerencia: "Marketing", pontos: 210 },
-    { nome: "João Pedro", gerencia: "Operações", pontos: 45 },
-    { nome: "Mariana Luz", gerencia: "Operações", pontos: 90 },
-    { nome: "Felipe Costa", gerencia: "Marketing", pontos: 55 }
+    // Time DS&IP
+    { nome: "Luís Mattos", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Juan Esteban", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Beatriz Borges", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Raissa Pulz", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Camila Fernandes", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Carol Todesquini", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Yan Rodrigues", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Marcella Pioltine", gerencia: "DS&IP", pontos: 0 },
+    { nome: "Jacqueline Reis", gerencia: "DS&IP", pontos: 0 }
 ];
 
-// 3. Calendário de Atividades (Formato da data: AAAA-MM-DD)
+// 3. Calendário de Atividades
 const calendario = [
-    { data: "2026-02-15", nome: "Quiz DSM", tipo: "Simples", local: "Teams", descricao: "Quiz rápido sobre a empresa." },
-    { data: "2026-02-21", nome: "Caça ao Tesouro", tipo: "Complexa", local: "Escritório", descricao: "Busca de pistas pelo andar." },
-    { data: "2026-03-10", nome: "Meme Friday", tipo: "Engajamento", local: "Grupo de WhatsApp", descricao: "Compartilhar memes da semana." }
+    { data: "2026-03-05", nome: "Quiz DSM", tipo: "Simples", local: "Teams", descricao: "Quiz rápido sobre a empresa." },
+    { data: "2026-03-20", nome: "Meme Friday", tipo: "Engajamento", local: "WhatsApp", descricao: "Compartilhar o melhor meme de trabalho." }
 ];
