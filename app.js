@@ -1,16 +1,16 @@
-// 1. Configuração das Gerências (Nomes dos arquivos DEVEM estar idênticos no GitHub)
-const infoGerencias = {
-    "DS&IP": { pessoas: 9, brasao: "DS&IP.jpg" }, // Dica: se falhar, renomeie a imagem para DSIP.jpg e mude aqui
-    "MPO": { pessoas: 16, brasao: "MPO.png" },
-    "NDDC": { pessoas: 9, brasao: "NDDC.jpg" },
-    "IBP": { pessoas: 6, brasao: "IBP.png" },
-    "WHSL": { pessoas: 5, brasao: "WHSL.png" },
-    "NDS": { pessoas: 13, brasao: "NDS.png" },
-    "PRJ": { pessoas: 1, brasao: "" },
-    "DIR": { pessoas: 1, brasao: "" }
+// 1. Mapeamento dos Brasões (Apenas para garantir o formato correto da imagem .jpg ou .png)
+const imagensBrasoes = {
+    "DS&IP": "DS&IP.jpg",
+    "MPO": "MPO.png",
+    "NDDC": "NDDC.jpg",
+    "IBP": "IBP.png",
+    "WHSL": "WHSL.png",
+    "NDS": "NDS.png",
+    "PRJ": "",
+    "DIR": ""
 };
 
-// 2. Função de Navegação
+// 2. Função de Navegação (Botões)
 function showTab(tabId) {
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.classList.remove('active'));
@@ -21,7 +21,7 @@ function showTab(tabId) {
     }
 }
 
-// 3. Inicialização
+// 3. Carregamento Automático ao abrir a página
 document.addEventListener('DOMContentLoaded', () => {
     carregarDadosAtletas();
     carregarDadosCalendario();
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function carregarDadosAtletas() {
     try {
         const response = await fetch('tabela-atletas.csv');
-        if (!response.ok) throw new Error("Arquivo não encontrado");
+        if (!response.ok) throw new Error("Arquivo tabela-atletas.csv não encontrado");
         const data = await response.text();
         const lista = csvParaArray(data);
         renderRankings(lista);
@@ -42,7 +42,7 @@ async function carregarDadosAtletas() {
 async function carregarDadosCalendario() {
     try {
         const response = await fetch('tabela-calendario.csv');
-        if (!response.ok) throw new Error("Arquivo não encontrado");
+        if (!response.ok) throw new Error("Arquivo tabela-calendario.csv não encontrado");
         const data = await response.text();
         const lista = csvParaArray(data);
         renderCalendario(lista);
@@ -51,28 +51,39 @@ async function carregarDadosCalendario() {
     }
 }
 
-// 4. Conversor de CSV BLINDADO (Ignora acentos e maiúsculas/minúsculas das colunas do Excel)
+// 4. Conversor de CSV Super Robusto (Ignora erros de acento do Excel)
 function csvParaArray(txt) {
-    txt = txt.replace(/^\uFEFF/, ''); // Remove lixo invisível do Excel
+    txt = txt.replace(/^\uFEFF/, ''); // Remove sujeira invisível do Excel
     const linhas = txt.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return [];
     
     const separador = linhas[0].includes(';') ? ';' : ',';
-    
-    // Normaliza o cabeçalho: "Gerência" vira "GERENCIA"
-    const cabecalho = linhas[0].split(separador).map(h => 
-        h.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toUpperCase()
-    );
+    const cabecalho = linhas[0].split(separador).map(h => h.trim().toUpperCase());
     
     return linhas.slice(1).map(linha => {
         const valores = linha.split(separador);
-        return cabecalho.reduce((obj, h, i) => {
+        let obj = {};
+        
+        cabecalho.forEach((h, i) => {
+            // Identifica as colunas por fragmentos para driblar falhas de codificação do Excel
+            let key = h;
+            if (h.includes('ATL')) key = 'ATLETA';
+            else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
+            else if (h.includes('TOT')) key = 'TOTAL';
+            else if (h.includes('INT')) key = 'INTEGRACAO';
+            else if (h.includes('DAT')) key = 'DATA';
+            else if (h.includes('ATIV')) key = 'ATIVIDADE';
+            else if (h.includes('DESC')) key = 'DESCRICAO';
+            else if (h.includes('PONT')) key = 'PONTUACAO';
+            else if (h.includes('LOC')) key = 'LOCAL';
+            else if (h.includes('STAT')) key = 'STATUS';
+
             let val = valores[i] ? valores[i].trim() : "";
-            // Tira aspas duplas se o Excel tiver colocado
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            obj[h] = val;
-            return obj;
-        }, {});
+            obj[key] = val;
+        });
+        
+        return obj;
     });
 }
 
@@ -82,13 +93,12 @@ function renderRankings(dados) {
     const tbodyGerencias = document.getElementById('corpo-gerencias');
     if (!tbodyAtletas || !tbodyGerencias) return;
 
-    // -- Ranking Individual --
+    // -- 5A. Renderizar Ranking Individual --
     tbodyAtletas.innerHTML = '';
-    // Como normalizamos, as chaves agora são todas maiúsculas e sem acento
     dados.sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
 
     dados.forEach((atleta, i) => {
-        if (!atleta.ATLETA) return; 
+        if (!atleta.ATLETA) return;
         tbodyAtletas.innerHTML += `
             <tr>
                 <td>${i + 1}º</td>
@@ -99,23 +109,30 @@ function renderRankings(dados) {
             </tr>`;
     });
 
-    // -- Ranking Gerências --
-    const somas = {};
+    // -- 5B. Renderizar Ranking das Gerências (Cálculo Automático) --
+    const statsGerencias = {};
+    
+    // Conta os pontos e a quantidade de atletas automaticamente lendo o CSV
     dados.forEach(a => {
-        // Agora busca pela chave normalizada
         const g = a.GERENCIA;
-        if (!g) return;
+        if (!g || g === "---") return;
         
-        // Garante que a escrita do CSV bate com a do nosso JavaScript
-        // Se no CSV estiver "DS&IP", vai bater.
-        if (!somas[g]) somas[g] = 0;
-        somas[g] += Number(a.TOTAL || 0);
+        if (!statsGerencias[g]) {
+            statsGerencias[g] = { pontosTotais: 0, quantidadeAtletas: 0 };
+        }
+        statsGerencias[g].pontosTotais += Number(a.TOTAL || 0);
+        statsGerencias[g].quantidadeAtletas += 1;
     });
 
-    const rankG = Object.keys(somas).map(nome => {
-        const info = infoGerencias[nome] || { pessoas: 1, brasao: "" };
-        const media = (somas[nome] / info.pessoas).toFixed(2);
-        return { nome, media, brasao: info.brasao.trim() };
+    // Calcula o Per Capita
+    const rankG = Object.keys(statsGerencias).map(nome => {
+        const stats = statsGerencias[nome];
+        const media = (stats.pontosTotais / stats.quantidadeAtletas).toFixed(2);
+        
+        // Puxa a imagem se existir no mapeamento, senão deixa vazio
+        const arquivoBrasao = imagensBrasoes[nome] || "";
+        
+        return { nome, media, brasao: arquivoBrasao };
     }).sort((a, b) => b.media - a.media);
 
     tbodyGerencias.innerHTML = '';
@@ -140,7 +157,7 @@ function renderCalendario(dados) {
     tbody.innerHTML = '';
 
     dados.forEach(c => {
-        if (!c.ATIVIDADE) return; 
+        if (!c.ATIVIDADE) return;
         tbody.innerHTML += `
             <tr>
                 <td>${c.DATA || ""}</td>
