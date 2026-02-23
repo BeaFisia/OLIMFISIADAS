@@ -1,8 +1,11 @@
 // 1. Configuração das Gerências (Nomes devem ser IDÊNTICOS aos do CSV)
 const infoGerencias = {
     "DS&IP": { pessoas: 9, brasao: "DS&IP.jpg" },
-    "MPO": { pessoas: 15, brasao: "MPO.jpg" },
-    "NDDC": { pessoas: 7, brasao: "NDDC.jpg" }
+    "MPO": { pessoas: 16, brasao: "MPO.png" },
+    "NDDC": { pessoas: 9, brasao: "NDDC.jpg" },
+    "IBP": { pessoas: 6, brasao: "IBP.png" },
+    "WHSL": { pessoas: 5, brasao: "WHSL.png" },
+    "NDS": { pessoas: 13, brasao: "NDS.png" }
 };
 
 // 2. Função de Navegação (Movida para fora para garantir que funcione sempre)
