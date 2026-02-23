@@ -9,115 +9,72 @@
 <body>
     <header>
         <h1>🏆 Olimfísiadas DSM</h1>
-        <p>O campeonato mais leve e integrado da nossa diretoria!</p>
+        <p>Integração, Movimento e Diversão</p>
         <nav>
-            <button onclick="showTab('home')">Início (Regras & Calendário)</button>
+            <button onclick="showTab('home')">Início</button>
             <button onclick="showTab('ranking')">Rankings</button>
             <button onclick="showTab('organograma')">Organogramas</button>
-            <button onclick="showTab('galeria')">Galeria de Fotos</button>
+            <button onclick="showTab('galeria')">Galeria</button>
         </nav>
     </header>
 
     <main>
         <section id="home" class="tab-content active">
-            <h2>O que é o Olimfísiadas?</h2>
-            <p>O Olimfísiadas é o nosso projeto para gerar integração entre as gerências de DSM. Através de atividades variadas e leves, acumulamos pontos individuais que ajudam nossa gerência a subir no ranking. O objetivo? Ter um dia a dia mais leve, interagir com o time e nos divertir!</p>
-            
-            <h3>Regras e Pontuações</h3>
-            <ul>
-                <li><strong>Engajamento:</strong> Atividades cotidianas. 2 pontos por participação.</li>
-                <li><strong>Simples:</strong> A cada 10-15 dias. 2 pontos por participação + bônus de vitória (Top 10: 50, 45, 40...).</li>
-                <li><strong>Complexas:</strong> Maior estrutura. 5 pontos por participação + super bônus de vitória (Top 10: 100, 90, 80...).</li>
-            </ul>
-            <p>O campeonato possui dois tipos de ranking individual:</p>
-            <ul>
-                <li><strong>Ranking de Integração:</strong> Considera os pontos de engajamento e participação nas atividades.</li>
-                <li><strong>Ranking Total:</strong> Conta os pontos de integração mais os pontos de vitórias nas atividades. A posição final dos atletas é baseada nesta pontuação.</li>
-            </ul>
-            <p><em>Nota: A pontuação da gerência é calculada com base na pontuação TOTAL dos atletas, dividida pelo número de atletas da gerência (per capita).</em></p>
+            <div class="card">
+                <h2>O que é o Olimfísiadas?</h2>
+                <p>O Olimfísiadas é o nosso projeto para gerar integração entre as gerências de DSM. Através de atividades variadas, acumulamos pontos que ajudam nossa gerência a subir no ranking.</p>
+                
+                <h3>Regras de Pontuação</h3>
+                <div class="regras-grid">
+                    <div class="regra-item"><strong>Engajamento:</strong> 2 pts (participação)</div>
+                    <div class="regra-item"><strong>Simples:</strong> 2 pts + Bônus Vitória</div>
+                    <div class="regra-item"><strong>Complexas:</strong> 5 pts + Super Bônus</div>
+                </div>
+            </div>
 
-            <hr>
-
-            <h2>Calendário de Atividades</h2>
-            <table id="tabela-calendario">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Atividade</th>
-                        <th>Descrição</th>
-                        <th>Pontuação</th>
-                        <th>Local</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="corpo-calendario">
-                    </tbody>
-            </table>
+            <div class="card">
+                <h2>📅 Calendário de Atividades</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Atividade</th>
+                                <th>Local</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-calendario"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <section id="ranking" class="tab-content">
-            <h2>Ranking das Gerências</h2>
-            <table id="tabela-gerencias">
-                <thead>
-                    <tr>
-                        <th>Posição</th>
-                        <th>Gerência</th>
-                        <th>Pontuação (Per Capita)</th>
-                    </tr>
-                </thead>
-                <tbody id="corpo-gerencias">
-                    </tbody>
-            </table>
-
-            <h2>Ranking Individual (Atletas)</h2>
-            <table id="tabela-atletas">
-                <thead>
-                    <tr>
-                        <th>Posição</th>
-                        <th>Atleta</th>
-                        <th>Gerência</th>
-                        <th>Pts Integração</th>
-                        <th>Pts Totais</th>
-                    </tr>
-                </thead>
-                <tbody id="corpo-atletas">
-                    </tbody>
-            </table>
-        </section>
-
-        <section id="organograma" class="tab-content">
-            <h2>Organogramas da Diretoria</h2>
-            <p>Conheça a estrutura da nossa diretoria e veja quem está em campo por cada time.</p>
-            
-            <div class="organograma-box" style="margin-bottom: 40px;">
-                <h3>Gerência: DS&IP</h3>
-                <img src="organograma-dsip.jpg" alt="Organograma DS&IP" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            </div>
-            
-            <div class="organograma-box" style="margin-bottom: 40px;">
-                <h3>Gerência: MPO</h3>
-                <img src="organograma-mpo.jpg" alt="Organograma MPO" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="card">
+                <h2>📊 Ranking das Gerências (Per Capita)</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Posição</th>
+                                <th>Gerência</th>
+                                <th>Média de Pontos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-gerencias"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="organograma-box" style="margin-bottom: 40px;">
-                <h3>Gerência: NDDC</h3>
-                <img src="organograma-nddc.jpg" alt="Organograma NDDC" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            </div>
-            </section>
-
-        <section id="galeria" class="tab-content">
-            <h2>Galeria de Fotos e Vídeos</h2>
-            <p>Envie seus registros e reviva os melhores momentos!</p>
-            <div class="alerta-upload">
-                <p><strong>Atenção:</strong> Para enviar fotos, faça o upload na pasta compartilhada da rede ou envie para a organização adicionar ao portal.</p>
-                <a href="#" class="btn-upload">Acessar Pasta de Uploads (Drive/SharePoint)</a>
-            </div>
-            <div id="grid-fotos">
-                <p><em>[Espaço reservado para a galeria]</em></p>
-            </div>
-        </section>
-    </main>
-
-    <script src="app.js"></script>
-</body>
-</html>
+            <div class="card">
+                <h2>Individual: Top Atletas</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Posição</th>
+                                <th>Atleta</th>
+                                <th>Gerência</th>
+                                <th>Total</th>
+                            </tr>
