@@ -1,135 +1,104 @@
-/**
- * FUNÇÃO DE NAVEGAÇÃO (CORRIGE O BUG DOS BOTÕES)
- * Esta função é responsável por mostrar a secção clicada e esconder as outras.
- */
-function showTab(tabId) {
-    // Seleciona todos os conteúdos das abas
-    const tabs = document.querySelectorAll('.tab-content');
-    
-    // Remove a classe 'active' de todas as abas
-    tabs.forEach(tab => {
-        tab.classList.remove('active');
-    });
+// Configuração das Gerências (Ajuste os nomes das fotos aqui)
+const infoGerencias = {
+    "DS&IP": { pessoas: 9, brasao: "DS&IP.jpg" },
+    "MPO": { pessoas: 14, brasao: "MPO.jpg" },
+    "NDDC": { pessoas: 6, brasao: "NDDC.jpg" }
+};
 
-    // Adiciona a classe 'active' apenas à aba que foi clicada
-    const targetTab = document.getElementById(tabId);
-    if (targetTab) {
-        targetTab.classList.add('active');
-    } else {
-        console.error("[Erro] Aba não encontrada: " + tabId);
-    }
-}
-
-/**
- * INICIALIZAÇÃO
- * Executa as funções assim que a página é carregada.
- */
 document.addEventListener('DOMContentLoaded', () => {
-    renderCalendario();
-    renderRankings();
+    carregarDados();
 });
 
-/**
- * LÓGICA DO CALENDÁRIO
- */
-function getStatus(dataAtividade) {
-    const hoje = new Date().toISOString().split('T')[0];
-    if (dataAtividade < hoje) return '<span class="status-done">Concluído</span>';
-    if (dataAtividade === hoje) return '<span class="status-progress">Em Curso</span>';
-    return '<span class="status-not-started">Agendado</span>';
+async function carregarDados() {
+    try {
+        // LER ATLETAS E RANKINGS
+        const resAtletas = await fetch('tabela-atletas.csv');
+        const csvAtletas = await resAtletas.text();
+        const listaAtletas = csvParaArray(csvAtletas);
+        renderRankings(listaAtletas);
+
+        // LER CALENDÁRIO
+        const resCal = await fetch('tabela-calendario.csv');
+        const csvCal = await resCal.text();
+        const listaCal = csvParaArray(csvCal);
+        renderCalendario(listaCal);
+    } catch (erro) {
+        console.error("Erro ao ler arquivos CSV. Verifique se os nomes no GitHub estão corretos.", erro);
+    }
 }
 
-function renderCalendario() {
-    const tbody = document.getElementById('corpo-calendario');
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-    // Ordena por data (mais recente primeiro)
-    const calendarioOrdenado = [...calendario].sort((a, b) => new Date(a.data) - new Date(b.data));
-
-    calendarioOrdenado.forEach(ativ => {
-        const dataFormatada = ativ.data.split('-').reverse().join('/');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${dataFormatada}</td>
-            <td><strong>${ativ.nome}</strong><br><small>(${ativ.tipo})</small></td>
-            <td>${ativ.descricao}</td>
-            <td>${ativ.tipo === 'Engajamento' ? '2 pts' : 'Participação + Bónus'}</td>
-            <td>${ativ.local}</td>
-            <td>${getStatus(ativ.data)}</td>
-        `;
-        tbody.appendChild(tr);
+// Função mágica que transforma o CSV em dados que o código entende
+function csvParaArray(txt) {
+    const linhas = txt.split('\n').filter(l => l.trim() !== '');
+    const cabecalho = linhas[0].split(',');
+    return linhas.slice(1).map(linha => {
+        const valores = linha.split(',');
+        return cabecalho.reduce((obj, h, i) => {
+            obj[h.trim()] = valores[i]?.trim();
+            return obj;
+        }, {});
     });
 }
 
-/**
- * LÓGICA DOS RANKINGS (INDIVIDUAL E GERÊNCIAS)
- */
-function renderRankings() {
-    // 1. RANKING INDIVIDUAL (ATLETAS)
+function renderRankings(dados) {
     const tbodyAtletas = document.getElementById('corpo-atletas');
-    if (tbodyAtletas) {
-        tbodyAtletas.innerHTML = '';
-        // Ordena pelo Ranking TOTAL (maior para menor)
-        const atletasOrdenados = [...atletas].sort((a, b) => b.pontosTotal - a.pontosTotal);
-
-        atletasOrdenados.forEach((atleta, index) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${index + 1}º</td>
-                <td>${atleta.nome}</td>
-                <td>${atleta.gerencia || "---"}</td>
-                <td>${atleta.pontosIntegracao}</td>
-                <td><strong>${atleta.pontosTotal}</strong></td>
-            `;
-            tbodyAtletas.appendChild(tr);
-        });
-    }
-
-    // 2. RANKING DAS GERÊNCIAS (PER CAPITA)
     const tbodyGerencias = document.getElementById('corpo-gerencias');
-    if (tbodyGerencias) {
-        tbodyGerencias.innerHTML = '';
-        
-        const somaGerencias = {};
-        
-        // Acumula os pontos totais por gerência
-        atletas.forEach(atleta => {
-            if (atleta.gerencia) {
-                if (!somaGerencias[atleta.gerencia]) somaGerencias[atleta.gerencia] = 0;
-                somaGerencias[atleta.gerencia] += atleta.pontosTotal;
-            }
-        });
+    
+    // 1. Ranking Individual
+    tbodyAtletas.innerHTML = '';
+    const atletasOrdenados = dados.sort((a, b) => Number(b.TOTAL) - Number(a.TOTAL));
+    
+    atletasOrdenados.forEach((atleta, i) => {
+        tbodyAtletas.innerHTML += `
+            <tr>
+                <td>${i+1}º</td>
+                <td>${atleta.Atleta}</td>
+                <td>${atleta.Gerência}</td>
+                <td>${atleta.INTEGRAÇÃO}</td>
+                <td><strong>${atleta.TOTAL}</strong></td>
+            </tr>`;
+    });
 
-        // Calcula a média per capita usando infoGerencias do data.js
-        const rankingGerencias = Object.keys(somaGerencias).map(nomeG => {
-            const pontosG = somaGerencias[nomeG];
-            const info = infoGerencias[nomeG] || { pessoas: 1, brasao: "" };
-            const perCapita = (pontosG / info.pessoas).toFixed(2);
-            return { 
-                nome: nomeG, 
-                pontosPerCapita: parseFloat(perCapita), 
-                brasao: info.brasao 
-            };
-        });
+    // 2. Ranking Gerências (Soma e Média)
+    const somas = {};
+    dados.forEach(a => {
+        if(!somas[a.Gerência]) somas[a.Gerência] = 0;
+        somas[a.Gerência] += Number(a.TOTAL);
+    });
 
-        // Ordena do maior para o menor per capita
-        rankingGerencias.sort((a, b) => b.pontosPerCapita - a.pontosPerCapita);
+    const rankG = Object.keys(somas).map(g => {
+        const info = infoGerencias[g] || { pessoas: 1, brasao: "default.jpg" };
+        return { nome: g, media: (somas[g] / info.pessoas).toFixed(2), brasao: info.brasao };
+    }).sort((a, b) => b.media - a.media);
 
-        rankingGerencias.forEach((g, index) => {
-            const tr = document.createElement('tr');
-            // [Inferência] O uso do onerror na imagem serve para evitar o ícone de "imagem partida" caso o arquivo não exista no GitHub.
-            tr.innerHTML = `
-                <td>${index + 1}º</td>
-                <td>
-                    <img src="${g.brasao}" class="brasao-gerencia" 
-                         onerror="this.style.display='none'" 
-                         alt="">
-                    ${g.nome}
-                </td>
-                <td><strong>${g.pontosPerCapita}</strong></td>
-            `;
-            tbodyGerencias.appendChild(tr);
-        });
-    }
+    tbodyGerencias.innerHTML = '';
+    rankG.forEach((g, i) => {
+        tbodyGerencias.innerHTML += `
+            <tr>
+                <td>${i+1}º</td>
+                <td><img src="${g.brasao}" style="width:30px; vertical-align:middle; margin-right:10px;">${g.nome}</td>
+                <td><strong>${g.media}</strong></td>
+            </tr>`;
+    });
+}
+
+function renderCalendario(dados) {
+    const tbody = document.getElementById('corpo-calendario');
+    tbody.innerHTML = '';
+    dados.forEach(c => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.Data}</td>
+                <td>${c.Atividade}</td>
+                <td>${c.Descrição}</td>
+                <td>${c.Pontuação}</td>
+                <td>${c.Local}</td>
+                <td>${c.Status || 'Agendado'}</td>
+            </tr>`;
+    });
+}
+
+function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
