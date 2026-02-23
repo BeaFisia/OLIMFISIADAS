@@ -1,6 +1,6 @@
-// 1. Configuração das Gerências
+// 1. Configuração das Gerências (Nomes dos arquivos DEVEM estar idênticos no GitHub)
 const infoGerencias = {
-    "DS&IP": { pessoas: 9, brasao: "DS&IP.jpg" },
+    "DS&IP": { pessoas: 9, brasao: "DS&IP.jpg" }, // Dica: se falhar, renomeie a imagem para DSIP.jpg e mude aqui
     "MPO": { pessoas: 16, brasao: "MPO.png" },
     "NDDC": { pessoas: 9, brasao: "NDDC.jpg" },
     "IBP": { pessoas: 6, brasao: "IBP.png" },
@@ -10,12 +10,10 @@ const infoGerencias = {
     "DIR": { pessoas: 1, brasao: "" }
 };
 
-// 2. Função de Navegação (Botões)
+// 2. Função de Navegação
 function showTab(tabId) {
     const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.classList.remove('active');
-    });
+    tabs.forEach(tab => tab.classList.remove('active'));
     
     const targetTab = document.getElementById(tabId);
     if (targetTab) {
@@ -23,7 +21,7 @@ function showTab(tabId) {
     }
 }
 
-// 3. Carregamento de Dados ao abrir a página
+// 3. Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     carregarDadosAtletas();
     carregarDadosCalendario();
@@ -32,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function carregarDadosAtletas() {
     try {
         const response = await fetch('tabela-atletas.csv');
-        if (!response.ok) throw new Error("Arquivo tabela-atletas.csv não encontrado");
+        if (!response.ok) throw new Error("Arquivo não encontrado");
         const data = await response.text();
         const lista = csvParaArray(data);
         renderRankings(lista);
@@ -44,7 +42,7 @@ async function carregarDadosAtletas() {
 async function carregarDadosCalendario() {
     try {
         const response = await fetch('tabela-calendario.csv');
-        if (!response.ok) throw new Error("Arquivo tabela-calendario.csv não encontrado");
+        if (!response.ok) throw new Error("Arquivo não encontrado");
         const data = await response.text();
         const lista = csvParaArray(data);
         renderCalendario(lista);
@@ -53,21 +51,26 @@ async function carregarDadosCalendario() {
     }
 }
 
-// 4. Conversor de CSV (com correção do bug do Excel)
+// 4. Conversor de CSV BLINDADO (Ignora acentos e maiúsculas/minúsculas das colunas do Excel)
 function csvParaArray(txt) {
-    // Remove o caractere invisível (BOM) que o Excel insere no começo do arquivo
-    txt = txt.replace(/^\uFEFF/, '');
-    
+    txt = txt.replace(/^\uFEFF/, ''); // Remove lixo invisível do Excel
     const linhas = txt.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return [];
     
     const separador = linhas[0].includes(';') ? ';' : ',';
-    const cabecalho = linhas[0].split(separador).map(h => h.trim());
+    
+    // Normaliza o cabeçalho: "Gerência" vira "GERENCIA"
+    const cabecalho = linhas[0].split(separador).map(h => 
+        h.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toUpperCase()
+    );
     
     return linhas.slice(1).map(linha => {
         const valores = linha.split(separador);
         return cabecalho.reduce((obj, h, i) => {
-            obj[h] = valores[i] ? valores[i].trim() : "";
+            let val = valores[i] ? valores[i].trim() : "";
+            // Tira aspas duplas se o Excel tiver colocado
+            if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+            obj[h] = val;
             return obj;
         }, {});
     });
@@ -81,16 +84,17 @@ function renderRankings(dados) {
 
     // -- Ranking Individual --
     tbodyAtletas.innerHTML = '';
+    // Como normalizamos, as chaves agora são todas maiúsculas e sem acento
     dados.sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
 
     dados.forEach((atleta, i) => {
-        if (!atleta.Atleta) return; // Pula linhas vazias
+        if (!atleta.ATLETA) return; 
         tbodyAtletas.innerHTML += `
             <tr>
                 <td>${i + 1}º</td>
-                <td>${atleta.Atleta}</td>
-                <td>${atleta.Gerência || atleta.Gerencia || "---"}</td>
-                <td>${atleta.INTEGRAÇÃO || atleta.Integração || 0}</td>
+                <td>${atleta.ATLETA}</td>
+                <td>${atleta.GERENCIA || "---"}</td>
+                <td>${atleta.INTEGRACAO || 0}</td>
                 <td><strong>${atleta.TOTAL || 0}</strong></td>
             </tr>`;
     });
@@ -98,8 +102,12 @@ function renderRankings(dados) {
     // -- Ranking Gerências --
     const somas = {};
     dados.forEach(a => {
-        const g = a.Gerência || a.Gerencia;
+        // Agora busca pela chave normalizada
+        const g = a.GERENCIA;
         if (!g) return;
+        
+        // Garante que a escrita do CSV bate com a do nosso JavaScript
+        // Se no CSV estiver "DS&IP", vai bater.
         if (!somas[g]) somas[g] = 0;
         somas[g] += Number(a.TOTAL || 0);
     });
@@ -112,9 +120,8 @@ function renderRankings(dados) {
 
     tbodyGerencias.innerHTML = '';
     rankG.forEach((g, i) => {
-        // Só tenta mostrar a imagem se houver um nome de arquivo preenchido
         const tagImagem = g.brasao !== "" 
-            ? `<img src="${g.brasao}" alt="Brasão" style="width:30px; margin-right:10px; vertical-align:middle">` 
+            ? `<img src="${g.brasao}" alt="${g.nome}" style="width:30px; margin-right:10px; vertical-align:middle; border-radius:4px;">` 
             : ``;
 
         tbodyGerencias.innerHTML += `
@@ -133,15 +140,15 @@ function renderCalendario(dados) {
     tbody.innerHTML = '';
 
     dados.forEach(c => {
-        if (!c.Atividade) return; // Pula linhas vazias
+        if (!c.ATIVIDADE) return; 
         tbody.innerHTML += `
             <tr>
-                <td>${c.Data || ""}</td>
-                <td>${c.Atividade || ""}</td>
-                <td>${c.Descrição || c.Descricao || ""}</td>
-                <td>${c.Pontuação || c.Pontuacao || ""}</td>
-                <td>${c.Local || ""}</td>
-                <td><span class="status-badge">${c.Status || "Agendado"}</span></td>
+                <td>${c.DATA || ""}</td>
+                <td>${c.ATIVIDADE || ""}</td>
+                <td>${c.DESCRICAO || ""}</td>
+                <td>${c.PONTUACAO || ""}</td>
+                <td>${c.LOCAL || ""}</td>
+                <td><span class="status-badge">${c.STATUS || "Agendado"}</span></td>
             </tr>`;
     });
 }
