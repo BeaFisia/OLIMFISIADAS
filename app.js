@@ -1,4 +1,4 @@
-// 1. Configuração de Imagens (Brasões)
+// 1. Configuração de Imagens (Brasões na Tabela de Ranking)
 const imagensBrasoes = {
     "DS&IP": "DS&IP.jpg",
     "MPO": "MPO.png",
@@ -12,15 +12,13 @@ const imagensBrasoes = {
 
 // 2. Navegação entre Abas
 function showTab(tabId) {
-    // Esconde todas
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.classList.remove('active'));
     
-    // Mostra a selecionada
     const targetTab = document.getElementById(tabId);
     if (targetTab) {
         targetTab.classList.add('active');
-        window.scrollTo(0, 0); // Volta ao topo ao mudar de aba
+        window.scrollTo(0, 0);
     }
 }
 
@@ -30,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarDadosCalendario();
 });
 
-// 4. Funções de Carga de Dados
+// 4. Funções de Carga de Dados (Busca nos arquivos .csv do GitHub)
 async function carregarDadosAtletas() {
     try {
         const response = await fetch('tabela-atletas.csv');
@@ -55,9 +53,9 @@ async function carregarDadosCalendario() {
     }
 }
 
-// 5. Conversor de CSV (Tratamento de Colunas do Excel)
+// 5. Conversor de CSV (Tratamento para não quebrar com acentos do Excel)
 function csvParaArray(txt) {
-    txt = txt.replace(/^\uFEFF/, ''); // Limpa caractere invisível do Excel
+    txt = txt.replace(/^\uFEFF/, '');
     const linhas = txt.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return [];
     
@@ -70,7 +68,6 @@ function csvParaArray(txt) {
         
         cabecalhoOriginal.forEach((h, i) => {
             let key = h;
-            // Normalização de chaves para o código (Independente de acento no CSV)
             if (h.includes('ATL')) key = 'ATLETA';
             else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
             else if (h.includes('TOT')) key = 'TOTAL';
