@@ -1,8 +1,8 @@
 :root {
-    --primary: #27ae60;
-    --secondary: #2c3e50;
-    --bg: #f4f7f6;
-    --white: #ffffff;
+    --primary: #FF6600; /* Laranja-esporte */
+    --secondary: #000000; /* Preto-básico */
+    --bg: #f4f7f6; /* Cinza para o fundo geral */
+    --white: #ffffff; /* Branco para as caixas de texto */
     --shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -21,11 +21,21 @@ body {
 
 /* Header & Nav */
 header {
-    background: linear-gradient(135deg, var(--secondary), #1a252f);
+    background: var(--secondary); /* Fundo Preto */
     color: var(--white);
     padding: 2rem 1rem;
     text-align: center;
     box-shadow: var(--shadow);
+    border-bottom: 5px solid var(--primary); /* Detalhe laranja na borda inferior do topo */
+}
+
+header h1 {
+    color: var(--primary); /* Título principal em laranja */
+}
+
+header p {
+    color: var(--white);
+    margin-top: 5px;
 }
 
 nav {
@@ -38,8 +48,8 @@ nav {
 
 nav button {
     background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
+    border: 2px solid var(--primary); /* Borda laranja */
+    color: var(--primary); /* Escrito laranja */
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 25px;
@@ -70,7 +80,7 @@ nav button:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Cards & Containers */
+/* Cards & Containers (Caixas Brancas) */
 .card {
     background: var(--white);
     padding: 2rem;
@@ -80,10 +90,33 @@ nav button:hover {
 }
 
 h2 {
-    color: var(--primary);
+    color: var(--primary); /* Headlines em Laranja */
     margin-bottom: 1rem;
     border-bottom: 2px solid #eee;
     padding-bottom: 5px;
+}
+
+h3 {
+    color: var(--primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Regras Grid (Caixas de Regras) */
+.regras-grid {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.regra-item {
+    background: var(--bg);
+    padding: 15px;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 200px;
+    border-left: 4px solid var(--primary); /* Detalhe lateral laranja */
 }
 
 /* Tables */
@@ -104,12 +137,12 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
-    color: var(--secondary);
+    background-color: var(--secondary); /* Cabeçalho da tabela Preto */
+    color: var(--white); /* Texto do cabeçalho Branco */
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
 }
 
 /* Organogramas */
@@ -137,27 +170,35 @@ tr:hover {
 
 .org-item h3 {
     background: var(--primary);
-    color: white;
+    color: var(--white);
     display: inline-block;
     padding: 5px 15px;
     border-radius: 4px;
+    margin-top: 0;
 }
 
-/* Badges e Botões */
+/* Badges e Botões (Links e Status) */
 .btn-primary {
     display: inline-block;
     background: var(--primary);
-    color: white;
+    color: var(--white);
     padding: 12px 25px;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #cc5200; /* Laranja mais escuro no hover */
 }
 
 .status-badge {
-    background: #e0f2f1;
-    color: #00796b;
+    background: #ffe6d5; /* Fundo laranja clarinho */
+    color: #cc5200; /* Texto laranja escuro */
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.85rem;
+    font-weight: bold;
 }
