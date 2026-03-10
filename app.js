@@ -21,7 +21,7 @@ function showTab(tabId) {
 document.addEventListener('DOMContentLoaded', () => {
     carregarDadosAtletas();
     carregarDadosCalendario();
-    carregarDadosComite(); // Nova chamada
+    carregarDadosComite();
 });
 
 async function carregarDadosAtletas() {
@@ -40,7 +40,6 @@ async function carregarDadosCalendario() {
     } catch (err) { console.error(err); }
 }
 
-// NOVA FUNÇÃO PARA O COMITÊ
 async function carregarDadosComite() {
     try {
         const response = await fetch('comite.csv');
@@ -68,6 +67,9 @@ function csvParaArray(txt) {
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
             else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
+            // NOVAS COLUNAS DO CALENDÁRIO AQUI:
+            else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
+            else if (h.includes('PONT')) key = 'PONTUACAO';
 
             let val = valores[i] ? valores[i].trim() : "";
             obj[key] = val;
@@ -109,17 +111,24 @@ function renderRankings(dados) {
     });
 }
 
+// CALENDÁRIO ATUALIZADO
 function renderCalendario(dados) {
     const tbody = document.getElementById('corpo-calendario');
     if (!tbody) return;
     tbody.innerHTML = '';
     dados.forEach(c => {
         if (!c.ATIVIDADE) return;
-        tbody.innerHTML += `<tr><td>${c.DATA || ""}</td><td>${c.ATIVIDADE || ""}</td><td>${c.LOCAL || "TBD"}</td><td><span class="status-badge">${c.STATUS || "Agendado"}</span></td></tr>`;
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.DATA || ""}</td>
+                <td>${c.ATIVIDADE || ""}</td>
+                <td>${c.DESCRICAO || "---"}</td>
+                <td>${c.PONTUACAO || "---"}</td>
+                <td><span class="status-badge">${c.STATUS || "Agendado"}</span></td>
+            </tr>`;
     });
 }
 
-// RENDERIZAÇÃO DO COMITÊ
 function renderComite(dados) {
     const tbody = document.getElementById('corpo-comite');
     if (!tbody) return;
