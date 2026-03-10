@@ -4,7 +4,8 @@ const imagensBrasoes = {
     "NDDC": "NDDC.jpg",
     "IBP": "IBP.png",
     "WHSL": "WHSL.png",
-    "NDS": "NDS.png"
+    "NDS": "NDS.png",
+    "DIR": "OLIM LOGO.jpg"
 };
 
 function showTab(tabId) {
