@@ -13,6 +13,7 @@
         <nav>
             <button onclick="showTab('home')">Início</button>
             <button onclick="showTab('ranking')">Rankings</button>
+            <button onclick="showTab('atividades')">Atividades</button>
             <button onclick="showTab('organograma')">Organogramas</button>
             <button onclick="showTab('galeria')">Galeria</button>
         </nav>
@@ -47,7 +48,9 @@
                             <tr>
                                 <th>Data</th>
                                 <th>Atividade</th>
-                                <th>Descrição</th> <th>Pontuação</th> <th>Status</th>
+                                <th>Descrição</th>
+                                <th>Pontuação</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="corpo-calendario"></tbody>
@@ -102,6 +105,21 @@
                             </tr>
                         </thead>
                         <tbody id="corpo-atletas"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="atividades" class="tab-content">
+            <div class="card">
+                <h2>🎯 Detalhamento de Pontos por Atividade</h2>
+                <p>Confira o histórico completo de pontos conquistados em cada evento. A ordem abaixo segue a lista oficial (sem ranqueamento).</p>
+                <div class="table-container">
+                    <table>
+                        <thead id="cabecalho-atividades">
+                            </thead>
+                        <tbody id="corpo-atividades">
+                            </tbody>
                     </table>
                 </div>
             </div>
