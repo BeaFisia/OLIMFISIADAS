@@ -5,7 +5,7 @@ const imagensBrasoes = {
     "IBP": "IBP.png",
     "WHSL": "WHSL.png",
     "NDS": "NDS.png",
-    "DIR": "OLIM LOGO.jpg"
+    "DIR": "OLIM LOGO.jpg" // <-- Atualizado conforme seu pedido!
 };
 
 function showTab(tabId) {
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarDadosAtletas();
     carregarDadosCalendario();
     carregarDadosComite();
+    carregarDadosAtividades(); // Nova aba Atividades
 });
 
 async function carregarDadosAtletas() {
@@ -49,12 +50,23 @@ async function carregarDadosComite() {
     } catch (err) { console.error(err); }
 }
 
+// NOVA FUNÇÃO: Carregar e renderizar Atividades dinamicamente
+async function carregarDadosAtividades() {
+    try {
+        const response = await fetch('tabela-atividades.csv');
+        if (!response.ok) return;
+        const data = await response.text();
+        renderAtividadesDinamico(data);
+    } catch (err) { console.error(err); }
+}
+
 function csvParaArray(txt) {
     txt = txt.replace(/^\uFEFF/, '');
     const linhas = txt.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return [];
     const separador = linhas[0].includes(';') ? ';' : ',';
     const cabecalhoOriginal = linhas[0].split(separador).map(h => h.trim().toUpperCase());
+    
     return linhas.slice(1).map(linha => {
         const valores = linha.split(separador);
         let obj = {};
@@ -67,11 +79,11 @@ function csvParaArray(txt) {
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
             else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
-            // NOVAS COLUNAS DO CALENDÁRIO AQUI:
             else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
             else if (h.includes('PONT')) key = 'PONTUACAO';
 
             let val = valores[i] ? valores[i].trim() : "";
+            if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
             obj[key] = val;
         });
         return obj;
@@ -111,7 +123,6 @@ function renderRankings(dados) {
     });
 }
 
-// CALENDÁRIO ATUALIZADO
 function renderCalendario(dados) {
     const tbody = document.getElementById('corpo-calendario');
     if (!tbody) return;
@@ -137,4 +148,40 @@ function renderComite(dados) {
         if (!m.NOME) return;
         tbody.innerHTML += `<tr><td>${m.NOME}</td><td>${m.GERENCIA || ""}</td><td>${m.PAPEL || "Organizador"}</td></tr>`;
     });
+}
+
+// RENDERIZAÇÃO DINÂMICA DA TABELA DE ATIVIDADES
+function renderAtividadesDinamico(csvText) {
+    csvText = csvText.replace(/^\uFEFF/, '');
+    const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
+    if (linhas.length === 0) return;
+
+    const thead = document.getElementById('cabecalho-atividades');
+    const tbody = document.getElementById('corpo-atividades');
+    if (!thead || !tbody) return;
+
+    const separador = linhas[0].includes(';') ? ';' : ',';
+    const cabecalhos = linhas[0].split(separador).map(h => h.trim());
+
+    // 1. Monta o cabeçalho automaticamente com base no Excel
+    thead.innerHTML = '<tr>' + cabecalhos.map(h => `<th>${h}</th>`).join('') + '</tr>';
+
+    // 2. Monta as linhas mantendo a ordem exata do arquivo
+    tbody.innerHTML = '';
+    for (let i = 1; i < linhas.length; i++) {
+        const valores = linhas[i].split(separador);
+        let tr = '<tr>';
+        cabecalhos.forEach((_, index) => {
+            let val = valores[index] ? valores[index].trim() : "---";
+            if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+            // Destaca a coluna "Total" (se existir) deixando em negrito
+            if (cabecalhos[index].toUpperCase().includes('TOT')) {
+                tr += `<td><strong>${val}</strong></td>`;
+            } else {
+                tr += `<td>${val}</td>`;
+            }
+        });
+        tr += '</tr>';
+        tbody.innerHTML += tr;
+    }
 }
