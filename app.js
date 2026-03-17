@@ -5,7 +5,7 @@ const imagensBrasoes = {
     "IBP": "IBP.png",
     "WHSL": "WHSL.png",
     "NDS": "NDS.png",
-    "DIR": "OLIM LOGO.jpg" // <-- Atualizado conforme seu pedido!
+    "DIR": "OLIM LOGO.jpg"
 };
 
 function showTab(tabId) {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarDadosAtletas();
     carregarDadosCalendario();
     carregarDadosComite();
-    carregarDadosAtividades(); // Nova aba Atividades
+    carregarDadosAtividades();
 });
 
 async function carregarDadosAtletas() {
@@ -50,7 +50,6 @@ async function carregarDadosComite() {
     } catch (err) { console.error(err); }
 }
 
-// NOVA FUNÇÃO: Carregar e renderizar Atividades dinamicamente
 async function carregarDadosAtividades() {
     try {
         const response = await fetch('tabela-atividades.csv');
@@ -81,8 +80,11 @@ function csvParaArray(txt) {
             else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
             else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
             else if (h.includes('PONT')) key = 'PONTUACAO';
+            // NOVA COLUNA AQUI: Mapeando Integração
+            else if (h.includes('INT') || h.includes('INTEGRA')) key = 'INTEGRACAO';
 
             let val = valores[i] ? valores[i].trim() : "";
+            // Remove aspas se existirem
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
             obj[key] = val;
         });
@@ -92,16 +94,11 @@ function csvParaArray(txt) {
 
 function renderRankings(dados) {
     const tbodyAtletas = document.getElementById('corpo-atletas');
+    const tbodyIntegracao = document.getElementById('corpo-atletas-integracao'); // Novo Corpo
     const tbodyGerencias = document.getElementById('corpo-gerencias');
-    if (!tbodyAtletas || !tbodyGerencias) return;
+    if (!tbodyAtletas || !tbodyGerencias || !tbodyIntegracao) return;
 
-    tbodyAtletas.innerHTML = '';
-    dados.sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
-    dados.forEach((atleta, i) => {
-        if (!atleta.NOME) return;
-        tbodyAtletas.innerHTML += `<tr><td>${i + 1}º</td><td>${atleta.NOME}</td><td>${atleta.GERENCIA || "---"}</td><td><strong>${atleta.TOTAL || 0}</strong></td></tr>`;
-    });
-
+    // 1. RANKING DAS GERÊNCIAS (Per Capita, usa o TOTAL)
     const stats = {};
     dados.forEach(a => {
         const g = a.GERENCIA;
@@ -120,6 +117,26 @@ function renderRankings(dados) {
     rankG.forEach((g, i) => {
         const imgTag = g.brasao ? `<img src="${g.brasao}" style="width:25px; margin-right:8px; vertical-align:middle;">` : "";
         tbodyGerencias.innerHTML += `<tr><td>${i + 1}º</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
+    });
+
+    // 2. RANKING INDIVIDUAL: TOTAL
+    // Usamos [...dados] para clonar a lista e não bagunçar a lista original ao ordenar
+    const dadosTotal = [...dados].sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
+    
+    tbodyAtletas.innerHTML = '';
+    dadosTotal.forEach((atleta, i) => {
+        if (!atleta.NOME) return;
+        tbodyAtletas.innerHTML += `<tr><td>${i + 1}º</td><td>${atleta.NOME}</td><td>${atleta.GERENCIA || "---"}</td><td><strong>${atleta.TOTAL || 0}</strong></td></tr>`;
+    });
+
+    // 3. RANKING INDIVIDUAL: INTEGRAÇÃO (NOVO)
+    // Clonamos de novo e ordenamos pela chave INTEGRACAO
+    const dadosIntegracao = [...dados].sort((a, b) => Number(b.INTEGRACAO || 0) - Number(a.INTEGRACAO || 0));
+    
+    tbodyIntegracao.innerHTML = '';
+    dadosIntegracao.forEach((atleta, i) => {
+        if (!atleta.NOME) return;
+        tbodyIntegracao.innerHTML += `<tr><td>${i + 1}º</td><td>${atleta.NOME}</td><td>${atleta.GERENCIA || "---"}</td><td><strong>${atleta.INTEGRACAO || 0}</strong></td></tr>`;
     });
 }
 
@@ -150,7 +167,6 @@ function renderComite(dados) {
     });
 }
 
-// RENDERIZAÇÃO DINÂMICA DA TABELA DE ATIVIDADES
 function renderAtividadesDinamico(csvText) {
     csvText = csvText.replace(/^\uFEFF/, '');
     const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
@@ -163,10 +179,8 @@ function renderAtividadesDinamico(csvText) {
     const separador = linhas[0].includes(';') ? ';' : ',';
     const cabecalhos = linhas[0].split(separador).map(h => h.trim());
 
-    // 1. Monta o cabeçalho automaticamente com base no Excel
     thead.innerHTML = '<tr>' + cabecalhos.map(h => `<th>${h}</th>`).join('') + '</tr>';
 
-    // 2. Monta as linhas mantendo a ordem exata do arquivo
     tbody.innerHTML = '';
     for (let i = 1; i < linhas.length; i++) {
         const valores = linhas[i].split(separador);
@@ -174,7 +188,6 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            // Destaca a coluna "Total" (se existir) deixando em negrito
             if (cabecalhos[index].toUpperCase().includes('TOT')) {
                 tr += `<td><strong>${val}</strong></td>`;
             } else {
