@@ -93,37 +93,45 @@
             </div>
 
             <div class="card">
-                <h2>Individual: Top Atletas (Total)</h2>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Posição</th>
-                                <th>Atleta</th>
-                                <th>Gerência</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-atletas"></tbody>
-                    </table>
+                <h2 onclick="toggleSection('conteudo-ranking-total', 'icone-total')" style="cursor: pointer; user-select: none;">
+                    <span id="icone-total">🔽</span> Individual: Top Atletas (Total)
+                </h2>
+                <div id="conteudo-ranking-total">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posição</th>
+                                    <th>Atleta</th>
+                                    <th>Gerência</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpo-atletas"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>Individual: Integração</h2>
-                <p>Quem mais participou e engajou nas atividades até agora!</p>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Posição</th>
-                                <th>Atleta</th>
-                                <th>Gerência</th>
-                                <th>Integração</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-atletas-integracao"></tbody>
-                    </table>
+                <h2 onclick="toggleSection('conteudo-ranking-integracao', 'icone-integracao')" style="cursor: pointer; user-select: none;">
+                    <span id="icone-integracao">🔽</span> Individual: Integração
+                </h2>
+                <div id="conteudo-ranking-integracao">
+                    <p>Quem mais participou e engajou nas atividades até agora!</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posição</th>
+                                    <th>Atleta</th>
+                                    <th>Gerência</th>
+                                    <th>Integração</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpo-atletas-integracao"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
