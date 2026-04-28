@@ -18,18 +18,15 @@ function showTab(tabId) {
     }
 }
 
-// NOVA FUNÇÃO: Abre e fecha as tabelas de ranking
 function toggleSection(sectionId, iconId) {
     const section = document.getElementById(sectionId);
     const icon = document.getElementById(iconId);
-    
-    // Se estiver escondido, mostra. Se estiver mostrando, esconde.
     if (section.style.display === "none") {
         section.style.display = "block";
-        icon.innerText = "🔽"; // Seta para baixo quando aberto
+        icon.innerText = "🔽";
     } else {
         section.style.display = "none";
-        icon.innerText = "▶️"; // Seta para o lado quando fechado
+        icon.innerText = "▶️";
     }
 }
 
@@ -106,12 +103,11 @@ function csvParaArray(txt) {
 }
 
 function renderRankings(dados) {
+    const tbodyGerencias = document.getElementById('corpo-gerencias');
     const tbodyAtletas = document.getElementById('corpo-atletas');
     const tbodyIntegracao = document.getElementById('corpo-atletas-integracao');
-    const tbodyGerencias = document.getElementById('corpo-gerencias');
-    if (!tbodyAtletas || !tbodyGerencias || !tbodyIntegracao) return;
+    if (!tbodyGerencias) return;
 
-    // 1. RANKING DAS GERÊNCIAS
     const stats = {};
     dados.forEach(a => {
         const g = a.GERENCIA;
@@ -121,29 +117,40 @@ function renderRankings(dados) {
         stats[g].count += 1;
     });
 
-    const rankG = Object.keys(stats).map(nome => {
+    // Criamos a lista base
+    let listaGerencias = Object.keys(stats).map(nome => {
         const media = (stats[nome].pontos / stats[nome].count).toFixed(2);
         return { nome, media, brasao: imagensBrasoes[nome] || "" };
-    }).sort((a, b) => b.media - a.media);
-
-    tbodyGerencias.innerHTML = '';
-    rankG.forEach((g, i) => {
-        const imgTag = g.brasao ? `<img src="${g.brasao}" style="width:25px; margin-right:8px; vertical-align:middle;">` : "";
-        tbodyGerencias.innerHTML += `<tr><td>${i + 1}º</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
     });
 
-    // 2. RANKING INDIVIDUAL: TOTAL
+    // SEPARAÇÃO: Removemos a DIR da disputa de ranking
+    const dadosDIR = listaGerencias.find(g => g.nome === "DIR");
+    const competitivas = listaGerencias.filter(g => g.nome !== "DIR");
+
+    // Ordenamos apenas as competitivas por média
+    competitivas.sort((a, b) => b.media - a.media);
+
+    // Montamos o ranking final: Competitivas primeiro + DIR no final
+    const rankFinal = [...competitivas];
+    if (dadosDIR) rankFinal.push(dadosDIR);
+
+    tbodyGerencias.innerHTML = '';
+    rankFinal.forEach((g, i) => {
+        const imgTag = g.brasao ? `<img src="${g.brasao}" style="width:25px; margin-right:8px; vertical-align:middle;">` : "";
+        // Se for a DIR, não mostramos posição numérica, apenas um traço ou ícone
+        const posicao = g.nome === "DIR" ? "-" : `${i + 1}º`;
+        tbodyGerencias.innerHTML += `<tr><td>${posicao}</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
+    });
+
+    // RANKINGS INDIVIDUAIS (Mantidos conforme original)
     const dadosTotal = [...dados].sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
-    
     tbodyAtletas.innerHTML = '';
     dadosTotal.forEach((atleta, i) => {
         if (!atleta.NOME) return;
         tbodyAtletas.innerHTML += `<tr><td>${i + 1}º</td><td>${atleta.NOME}</td><td>${atleta.GERENCIA || "---"}</td><td><strong>${atleta.TOTAL || 0}</strong></td></tr>`;
     });
 
-    // 3. RANKING INDIVIDUAL: INTEGRAÇÃO
     const dadosIntegracao = [...dados].sort((a, b) => Number(b.INTEGRACAO || 0) - Number(a.INTEGRACAO || 0));
-    
     tbodyIntegracao.innerHTML = '';
     dadosIntegracao.forEach((atleta, i) => {
         if (!atleta.NOME) return;
@@ -182,16 +189,12 @@ function renderAtividadesDinamico(csvText) {
     csvText = csvText.replace(/^\uFEFF/, '');
     const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return;
-
     const thead = document.getElementById('cabecalho-atividades');
     const tbody = document.getElementById('corpo-atividades');
     if (!thead || !tbody) return;
-
     const separador = linhas[0].includes(';') ? ';' : ',';
     const cabecalhos = linhas[0].split(separador).map(h => h.trim());
-
     thead.innerHTML = '<tr>' + cabecalhos.map(h => `<th>${h}</th>`).join('') + '</tr>';
-
     tbody.innerHTML = '';
     for (let i = 1; i < linhas.length; i++) {
         const valores = linhas[i].split(separador);
@@ -199,11 +202,7 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            if (cabecalhos[index].toUpperCase().includes('TOT')) {
-                tr += `<td><strong>${val}</strong></td>`;
-            } else {
-                tr += `<td>${val}</td>`;
-            }
+            tr += cabecalhos[index].toUpperCase().includes('TOT') ? `<td><strong>${val}</strong></td>` : `<td>${val}</td>`;
         });
         tr += '</tr>';
         tbody.innerHTML += tr;
