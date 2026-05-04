@@ -1,61 +1,62 @@
-Atleta;Gerencia;part - GYMRATS;win - GYMRATS;part - Trashketball;win - Trashketball
-Beatriz Borges;DS&IP;;;4;45
-Luis Mattos;DS&IP;;;4;50
-Juan Tobón;DS&IP;;;4;0
-Camila Fernandes;DS&IP;;;4;0
-Yan Rodrigues;DS&IP;;;0;0
-Jacqueline Reis;DS&IP;;;4;0
-Raissa Pulz;DS&IP;;;0;0
-Caroline Todesquini;DS&IP;;;4;0
-Marcella Ferro;DS&IP;;;0;0
-Marcel Diz;MPO;;;0;0
-Debora Cristina;MPO;;;0;0
-Tatiane Vido;MPO;;;0;0
-Rafael Batista;MPO;;;0;0
-Vitor Cristofaro;MPO;;;0;0
-Mayara Marques;MPO;;;4;0
-Marcela Rodrigues;MPO;;;0;0
-Fabricio Cavalcante;MPO;;;0;0
-Beatriz de Oliveira;MPO;;;0;0
-Luana Cesar ;MPO;;;0;0
-William Guglielmi;MPO;;;0;0
-Tania Xavier;MPO;;;0;0
-Fernando Calixto;MPO;;;0;0
-Juliana Figueredo;MPO;;;0;0
-Edmilson Jr;MPO;;;4;0
-Denis Barbosa;MPO;;;0;0
-Giullya Midori;NDDC;;;4;0
-Isabel Ramona;NDDC;;;0;0
-Dani Voros;NDDC;;;4;0
-Rayssa Kaoane;NDDC;;;4;0
-Phillipe Lam Goy;NDDC;;;4;0
-Tiago Lopes;NDDC;;;0;0
-Gabriel Pacheco;NDDC;;;4;0
-Gabriel Armoni;NDDC;;;4;0
-Caio Moraes;NDDC;;;4;45
-Luiz Prates;IBP;;;0;0
-Guilherme Medeiros;IBP;;;4;0
-Lucas Mendonça;IBP;;;4;0
-Lugu Szolnoky;IBP;;;4;0
-Lucas Cardoso;IBP;;;4;0
-Cadu Ribeiro;IBP;;;0;0
-Carolina Spedo;WHSL;;;4;0
-Thomas Sena;WHSL;;;4;45
-Gilvan Junior Oliveira;WHSL;;;4;45
-André Keidi;WHSL;;;4;0
-Thiago Forte;NDS;;;4;45
-Giuliana Filo;NDS;;;4;0
-Pedro Henrique Meira;NDS;;;4;0
-Talita Toledo;NDS;;;4;0
-João Zaghetto;NDS;;;4;0
-Giovanna Peceguini;NDS;;;0;0
-Fernanda Yamauchi;NDS;;;4;0
-Paulo Santos;NDS;;;4;0
-Vander Fonseca;NDS;;;0;0
-Helio Henrique;NDS;;;4;0
-Gabriela Alves;NDS;;;4;0
-Natan Saraiva;NDS;;;4;0
-Paulo Oliveira;NDS;;;4;45
-Jessica Santana;NDS;;;4;0
-Beatriz Razzini;PRJ;;;0;0
-Fabio Gomes;DIR;;;4;45
+Atleta;Gerencia;part - GYMRATS;win - GYMRATS;part - Trashketball;win - Trashketball;Equilibra&Corre - Participação;Equilibra&Corre- Vencedor
+Beatriz Borges;DS&IP;;;4;45;4;50
+Luis Mattos;DS&IP;;;4;50;0;0
+Juan Tobón;DS&IP;;;4;0;0;0
+Camila Fernandes;DS&IP;;;4;0;0;0
+Yan Rodrigues;DS&IP;;;0;0;4;0
+Jacqueline Reis;DS&IP;;;4;0;0;0
+Raissa Pulz;DS&IP;;;0;0;4;0
+Caroline Todesquini;DS&IP;;;4;0;0;15
+Marcella Ferro;DS&IP;;;0;0;4;25
+Priscila Mileo;DS&IP;;;0;0;0;0
+Marcel Diz;MPO;;;0;0;0;0
+Debora Cristina;MPO;;;0;0;0;0
+Tatiane Vido;MPO;;;0;0;0;0
+Rafael Batista;MPO;;;0;0;0;0
+Vitor Cristofaro;MPO;;;0;0;0;0
+Mayara Marques;MPO;;;4;0;0;0
+Marcela Rodrigues;MPO;;;0;0;0;0
+Fabricio Cavalcante;MPO;;;0;0;0;0
+Beatriz de Oliveira;MPO;;;0;0;0;0
+Luana Cesar ;MPO;;;0;0;0;0
+William Guglielmi;MPO;;;0;0;0;0
+Tania Xavier;MPO;;;0;0;0;0
+Fernando Calixto;MPO;;;0;0;0;0
+Juliana Figueredo;MPO;;;0;0;0;0
+Edmilson Jr;MPO;;;4;0;0;0
+Denis Barbosa;MPO;;;0;0;0;0
+Giullya Midori;NDDC;;;4;0;0;0
+Isabel Ramona;NDDC;;;0;0;0;0
+Dani Voros;NDDC;;;4;0;4;45
+Rayssa Kaoane;NDDC;;;4;0;4;30
+Phillipe Lam Goy;NDDC;;;4;0;4;35
+Tiago Lopes;NDDC;;;0;0;4;20
+Gabriel Pacheco;NDDC;;;4;0;4;0
+Gabriel Armoni;NDDC;;;4;0;4;0
+Caio Moraes;NDDC;;;4;45;0;0
+Luiz Prates;IBP;;;0;0;0;0
+Guilherme Medeiros;IBP;;;4;0;0;0
+Lucas Mendonça;IBP;;;4;0;4;10
+Lugu Szolnoky;IBP;;;4;0;0;0
+Lucas Cardoso;IBP;;;4;0;4;5
+Cadu Ribeiro;IBP;;;0;0;4;0
+Carol Spedo;WHSL;;;4;0;0;0
+Thomas Sena;WHSL;;;4;45;4;40
+Gilvan Junior Oliveira;WHSL;;;4;45;0;0
+André Keidi;WHSL;;;4;0;0;0
+Thiago Forte;NDS;;;4;45;0;0
+Giuliana Filo;NDS;;;4;0;0;0
+Pedro Henrique Meira;NDS;;;4;0;0;0
+Talita Toledo;NDS;;;4;0;0;0
+João Zaghetto;NDS;;;4;0;0;0
+Giovanna Peceguini;NDS;;;0;0;0;0
+Fernanda Yamauchi;NDS;;;4;0;0;0
+Paulo Santos;NDS;;;4;0;0;0
+Vander Fonseca;NDS;;;0;0;0;0
+Helio Henrique;NDS;;;4;0;0;0
+Gabriela Alves;NDS;;;4;0;0;0
+Natan Saraiva;NDS;;;4;0;0;0
+Paulo Oliveira;NDS;;;4;45;0;0
+Jessica Santana;NDS;;;4;0;0;0
+Beatriz Razzini;PRJ;;;0;0;0;0
+Fabio Gomes;DIR;;;4;45;0;0
