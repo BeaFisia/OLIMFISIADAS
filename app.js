@@ -84,17 +84,17 @@ function csvParaArray(txt) {
         let obj = {};
         cabecalhoOriginal.forEach((h, i) => {
             let key = h;
-            // MAPEAMENTO DIRETO COM OS NOVOS NOMES
-            if (h === 'ATLETA' || h === 'NOME') key = 'NOME';
-            else if (h === 'GERÊNCIA' || h === 'GERENCIA' || h === 'NCIA') key = 'GERENCIA';
-            else if (h === 'TOTAL') key = 'TOTAL';
-            else if (h === 'INTEGRAÇÃO' || h === 'INTEGRACAO') key = 'INTEGRACAO';
+            // MAPEAMENTO INTELIGENTE (Procura por partes da palavra para evitar erros de acento ou nome)
+            if (h.includes('ATL') || h.includes('NOM')) key = 'NOME';
+            else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
+            else if (h.includes('TOT') || h.includes('ACUM')) key = 'TOTAL'; // Pega "TOTAL" ou "Pontos acumulados"
+            else if (h.includes('INT')) key = 'INTEGRACAO'; // Pega "INTEGRAÇÃO", "INTEGRACAO" ou "Pontos Integração"
             else if (h.includes('DAT')) key = 'DATA';
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
             else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
             else if (h.includes('DESC')) key = 'DESCRICAO';
-            else if (h.includes('PONT')) key = 'PONTUACAO';
+            else if (h.includes('PONT') && !h.includes('ACUM') && !h.includes('INT')) key = 'PONTUACAO';
 
             let val = valores[i] ? valores[i].trim() : "";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
@@ -110,13 +110,15 @@ function renderRankings(dados) {
     const tbodyGerencias = document.getElementById('corpo-gerencias');
     if (!tbodyAtletas || !tbodyGerencias || !tbodyIntegracao) return;
 
-    // 1. RANKING DAS GERÊNCIAS (PER CAPITA DO TOTAL)
+    // 1. RANKING DAS GERÊNCIAS (PER CAPITA)
     const stats = {};
     dados.forEach(a => {
         const g = a.GERENCIA;
         if (!g || g === "---") return;
         if (!stats[g]) stats[g] = { pontos: 0, count: 0 };
-        stats[g].pontos += Number(a.TOTAL || 0);
+        // Garante que o valor é um número para não quebrar a média
+        const pontosAtleta = parseFloat(String(a.TOTAL).replace(',', '.')) || 0;
+        stats[g].pontos += pontosAtleta;
         stats[g].count += 1;
     });
 
@@ -125,7 +127,7 @@ function renderRankings(dados) {
         return { nome, media, brasao: imagensBrasoes[nome] || "" };
     });
 
-    // Filtro DIR sempre em último
+    // Lógica da DIR sempre em último
     const dadosDIR = rankG.find(g => g.nome === "DIR");
     const competitivas = rankG.filter(g => g.nome !== "DIR").sort((a, b) => b.media - a.media);
     const rankFinal = [...competitivas];
@@ -139,7 +141,11 @@ function renderRankings(dados) {
     });
 
     // 2. RANKING INDIVIDUAL: TOTAL
-    const dadosTotalSort = [...dados].sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
+    const dadosTotalSort = [...dados].sort((a, b) => {
+        const valA = parseFloat(String(a.TOTAL).replace(',', '.')) || 0;
+        const valB = parseFloat(String(b.TOTAL).replace(',', '.')) || 0;
+        return valB - valA;
+    });
     tbodyAtletas.innerHTML = '';
     dadosTotalSort.forEach((atleta, i) => {
         if (!atleta.NOME) return;
@@ -147,7 +153,11 @@ function renderRankings(dados) {
     });
 
     // 3. RANKING INDIVIDUAL: INTEGRAÇÃO
-    const dadosIntegracaoSort = [...dados].sort((a, b) => Number(b.INTEGRACAO || 0) - Number(a.INTEGRACAO || 0));
+    const dadosIntegracaoSort = [...dados].sort((a, b) => {
+        const valA = parseFloat(String(a.INTEGRACAO).replace(',', '.')) || 0;
+        const valB = parseFloat(String(b.INTEGRACAO).replace(',', '.')) || 0;
+        return valB - valA;
+    });
     tbodyIntegracao.innerHTML = '';
     dadosIntegracaoSort.forEach((atleta, i) => {
         if (!atleta.NOME) return;
@@ -192,7 +202,8 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            if (cabecalhos[index].toUpperCase() === 'TOTAL' || cabecalhos[index].toUpperCase() === 'INTEGRACAO' || cabecalhos[index].toUpperCase() === 'INTEGRAÇÃO') {
+            const headUpper = cabecalhos[index].toUpperCase();
+            if (headUpper.includes('TOT') || headUpper.includes('ACUM') || headUpper.includes('INT')) {
                 tr += `<td><strong>${val}</strong></td>`;
             } else {
                 tr += `<td>${val}</td>`;
