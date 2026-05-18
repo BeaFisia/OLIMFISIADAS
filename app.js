@@ -21,12 +21,13 @@ function showTab(tabId) {
 function toggleSection(sectionId, iconId) {
     const section = document.getElementById(sectionId);
     const icon = document.getElementById(iconId);
+    
     if (section.style.display === "none") {
         section.style.display = "block";
-        icon.innerText = "🔽";
+        icon.innerText = "🔽"; 
     } else {
         section.style.display = "none";
-        icon.innerText = "▶️";
+        icon.innerText = "▶️"; 
     }
 }
 
@@ -42,7 +43,7 @@ async function carregarDadosAtletas() {
         const response = await fetch('tabela-atletas.csv');
         const data = await response.text();
         renderRankings(csvParaArray(data));
-    } catch (err) { console.error("Erro Atletas:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function carregarDadosCalendario() {
@@ -50,7 +51,7 @@ async function carregarDadosCalendario() {
         const response = await fetch('tabela-calendario.csv');
         const data = await response.text();
         renderCalendario(csvParaArray(data));
-    } catch (err) { console.error("Erro Calendário:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function carregarDadosComite() {
@@ -59,7 +60,7 @@ async function carregarDadosComite() {
         if (!response.ok) return;
         const data = await response.text();
         renderComite(csvParaArray(data));
-    } catch (err) { console.error("Erro Comitê:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function carregarDadosAtividades() {
@@ -68,7 +69,7 @@ async function carregarDadosAtividades() {
         if (!response.ok) return;
         const data = await response.text();
         renderAtividadesDinamico(data);
-    } catch (err) { console.error("Erro Atividades:", err); }
+    } catch (err) { console.error(err); }
 }
 
 function csvParaArray(txt) {
@@ -83,17 +84,16 @@ function csvParaArray(txt) {
         let obj = {};
         cabecalhoOriginal.forEach((h, i) => {
             let key = h;
-            // Mapeamento Inteligente de Cabeçalhos
             if (h.includes('ATL') || h.includes('NOM')) key = 'NOME';
             else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
-            else if (h.includes('ACUM') || h.includes('TOT')) key = 'TOTAL'; // FIX: Agora lê "Acumulados"
-            else if (h.includes('INT')) key = 'INTEGRACAO';
+            else if (h.includes('ACUM') || h.includes('TOT')) key = 'TOTAL';
             else if (h.includes('DAT')) key = 'DATA';
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
-            else if (h.includes('PAP')) key = 'PAPEL';
-            else if (h.includes('DESC')) key = 'DESCRICAO';
-            else if (h.includes('PONT') && !h.includes('ACUM')) key = 'PONTUACAO'; 
+            else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
+            else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
+            else if (h.includes('PONT') && !h.includes('ACUM')) key = 'PONTUACAO';
+            else if (h.includes('INT') || h.includes('INTEGRA')) key = 'INTEGRACAO';
 
             let val = valores[i] ? valores[i].trim() : "";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
@@ -104,11 +104,12 @@ function csvParaArray(txt) {
 }
 
 function renderRankings(dados) {
-    const tbodyGerencias = document.getElementById('corpo-gerencias');
     const tbodyAtletas = document.getElementById('corpo-atletas');
     const tbodyIntegracao = document.getElementById('corpo-atletas-integracao');
-    if (!tbodyGerencias) return;
+    const tbodyGerencias = document.getElementById('corpo-gerencias');
+    if (!tbodyAtletas || !tbodyGerencias || !tbodyIntegracao) return;
 
+    // 1. RANKING DAS GERÊNCIAS
     const stats = {};
     dados.forEach(a => {
         const g = a.GERENCIA;
@@ -118,27 +119,26 @@ function renderRankings(dados) {
         stats[g].count += 1;
     });
 
-    let listaGerencias = Object.keys(stats).map(nome => {
+    let rankG = Object.keys(stats).map(nome => {
         const media = (stats[nome].pontos / stats[nome].count).toFixed(2);
         return { nome, media, brasao: imagensBrasoes[nome] || "" };
     });
 
-    // Lógica da DIR sempre em último
-    const dadosDIR = listaGerencias.find(g => g.nome === "DIR");
-    const competitivas = listaGerencias.filter(g => g.nome !== "DIR");
-    competitivas.sort((a, b) => b.media - a.media);
-
+    // Filtro para a DIR ficar sempre em último
+    const dadosDIR = rankG.find(g => g.nome === "DIR");
+    const competitivas = rankG.filter(g => g.nome !== "DIR").sort((a, b) => b.media - a.media);
+    
     const rankFinal = [...competitivas];
     if (dadosDIR) rankFinal.push(dadosDIR);
 
     tbodyGerencias.innerHTML = '';
     rankFinal.forEach((g, i) => {
         const imgTag = g.brasao ? `<img src="${g.brasao}" style="width:25px; margin-right:8px; vertical-align:middle;">` : "";
-        const posicao = g.nome === "DIR" ? "-" : `${i + 1}º`;
-        tbodyGerencias.innerHTML += `<tr><td>${posicao}</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
+        const posLabel = g.nome === "DIR" ? "-" : `${i + 1}º`;
+        tbodyGerencias.innerHTML += `<tr><td>${posLabel}</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
     });
 
-    // Rankings Individuais
+    // 2. RANKING INDIVIDUAL: TOTAL
     const dadosTotal = [...dados].sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
     tbodyAtletas.innerHTML = '';
     dadosTotal.forEach((atleta, i) => {
@@ -146,6 +146,7 @@ function renderRankings(dados) {
         tbodyAtletas.innerHTML += `<tr><td>${i + 1}º</td><td>${atleta.NOME}</td><td>${atleta.GERENCIA || "---"}</td><td><strong>${atleta.TOTAL || 0}</strong></td></tr>`;
     });
 
+    // 3. RANKING INDIVIDUAL: INTEGRAÇÃO
     const dadosIntegracao = [...dados].sort((a, b) => Number(b.INTEGRACAO || 0) - Number(a.INTEGRACAO || 0));
     tbodyIntegracao.innerHTML = '';
     dadosIntegracao.forEach((atleta, i) => {
@@ -160,7 +161,14 @@ function renderCalendario(dados) {
     tbody.innerHTML = '';
     dados.forEach(c => {
         if (!c.ATIVIDADE) return;
-        tbody.innerHTML += `<tr><td>${c.DATA || ""}</td><td>${c.ATIVIDADE || ""}</td><td>${c.DESCRICAO || "---"}</td><td>${c.PONTUACAO || "---"}</td><td><span class="status-badge">${c.STATUS || "Agendado"}</span></td></tr>`;
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.DATA || ""}</td>
+                <td>${c.ATIVIDADE || ""}</td>
+                <td>${c.DESCRICAO || "---"}</td>
+                <td>${c.PONTUACAO || "---"}</td>
+                <td><span class="status-badge">${c.STATUS || "Agendado"}</span></td>
+            </tr>`;
     });
 }
 
@@ -178,12 +186,16 @@ function renderAtividadesDinamico(csvText) {
     csvText = csvText.replace(/^\uFEFF/, '');
     const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return;
+
     const thead = document.getElementById('cabecalho-atividades');
     const tbody = document.getElementById('corpo-atividades');
     if (!thead || !tbody) return;
+
     const separador = linhas[0].includes(';') ? ';' : ',';
     const cabecalhos = linhas[0].split(separador).map(h => h.trim());
+
     thead.innerHTML = '<tr>' + cabecalhos.map(h => `<th>${h}</th>`).join('') + '</tr>';
+
     tbody.innerHTML = '';
     for (let i = 1; i < linhas.length; i++) {
         const valores = linhas[i].split(separador);
@@ -191,7 +203,11 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            tr += cabecalhos[index].toUpperCase().includes('ACUM') || cabecalhos[index].toUpperCase().includes('TOT') ? `<td><strong>${val}</strong></td>` : `<td>${val}</td>`;
+            if (cabecalhos[index].toUpperCase().includes('ACUM') || cabecalhos[index].toUpperCase().includes('TOT')) {
+                tr += `<td><strong>${val}</strong></td>`;
+            } else {
+                tr += `<td>${val}</td>`;
+            }
         });
         tr += '</tr>';
         tbody.innerHTML += tr;
