@@ -42,7 +42,7 @@ async function carregarDadosAtletas() {
         const response = await fetch('tabela-atletas.csv');
         const data = await response.text();
         renderRankings(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Atletas:", err); }
 }
 
 async function carregarDadosCalendario() {
@@ -50,7 +50,7 @@ async function carregarDadosCalendario() {
         const response = await fetch('tabela-calendario.csv');
         const data = await response.text();
         renderCalendario(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Calendário:", err); }
 }
 
 async function carregarDadosComite() {
@@ -59,7 +59,7 @@ async function carregarDadosComite() {
         if (!response.ok) return;
         const data = await response.text();
         renderComite(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Comitê:", err); }
 }
 
 async function carregarDadosAtividades() {
@@ -68,7 +68,7 @@ async function carregarDadosAtividades() {
         if (!response.ok) return;
         const data = await response.text();
         renderAtividadesDinamico(data);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Atividades:", err); }
 }
 
 function csvParaArray(txt) {
@@ -83,16 +83,17 @@ function csvParaArray(txt) {
         let obj = {};
         cabecalhoOriginal.forEach((h, i) => {
             let key = h;
+            // Mapeamento Inteligente de Cabeçalhos
             if (h.includes('ATL') || h.includes('NOM')) key = 'NOME';
             else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
-            else if (h.includes('TOT')) key = 'TOTAL';
+            else if (h.includes('ACUM') || h.includes('TOT')) key = 'TOTAL'; // FIX: Agora lê "Acumulados"
+            else if (h.includes('INT')) key = 'INTEGRACAO';
             else if (h.includes('DAT')) key = 'DATA';
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
-            else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
-            else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
-            else if (h.includes('PONT')) key = 'PONTUACAO';
-            else if (h.includes('INT') || h.includes('INTEGRA')) key = 'INTEGRACAO';
+            else if (h.includes('PAP')) key = 'PAPEL';
+            else if (h.includes('DESC')) key = 'DESCRICAO';
+            else if (h.includes('PONT') && !h.includes('ACUM')) key = 'PONTUACAO'; 
 
             let val = valores[i] ? valores[i].trim() : "";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
@@ -117,32 +118,27 @@ function renderRankings(dados) {
         stats[g].count += 1;
     });
 
-    // Criamos a lista base
     let listaGerencias = Object.keys(stats).map(nome => {
         const media = (stats[nome].pontos / stats[nome].count).toFixed(2);
         return { nome, media, brasao: imagensBrasoes[nome] || "" };
     });
 
-    // SEPARAÇÃO: Removemos a DIR da disputa de ranking
+    // Lógica da DIR sempre em último
     const dadosDIR = listaGerencias.find(g => g.nome === "DIR");
     const competitivas = listaGerencias.filter(g => g.nome !== "DIR");
-
-    // Ordenamos apenas as competitivas por média
     competitivas.sort((a, b) => b.media - a.media);
 
-    // Montamos o ranking final: Competitivas primeiro + DIR no final
     const rankFinal = [...competitivas];
     if (dadosDIR) rankFinal.push(dadosDIR);
 
     tbodyGerencias.innerHTML = '';
     rankFinal.forEach((g, i) => {
         const imgTag = g.brasao ? `<img src="${g.brasao}" style="width:25px; margin-right:8px; vertical-align:middle;">` : "";
-        // Se for a DIR, não mostramos posição numérica, apenas um traço ou ícone
         const posicao = g.nome === "DIR" ? "-" : `${i + 1}º`;
         tbodyGerencias.innerHTML += `<tr><td>${posicao}</td><td>${imgTag}${g.nome}</td><td><strong>${g.media}</strong></td></tr>`;
     });
 
-    // RANKINGS INDIVIDUAIS (Mantidos conforme original)
+    // Rankings Individuais
     const dadosTotal = [...dados].sort((a, b) => Number(b.TOTAL || 0) - Number(a.TOTAL || 0));
     tbodyAtletas.innerHTML = '';
     dadosTotal.forEach((atleta, i) => {
@@ -164,14 +160,7 @@ function renderCalendario(dados) {
     tbody.innerHTML = '';
     dados.forEach(c => {
         if (!c.ATIVIDADE) return;
-        tbody.innerHTML += `
-            <tr>
-                <td>${c.DATA || ""}</td>
-                <td>${c.ATIVIDADE || ""}</td>
-                <td>${c.DESCRICAO || "---"}</td>
-                <td>${c.PONTUACAO || "---"}</td>
-                <td><span class="status-badge">${c.STATUS || "Agendado"}</span></td>
-            </tr>`;
+        tbody.innerHTML += `<tr><td>${c.DATA || ""}</td><td>${c.ATIVIDADE || ""}</td><td>${c.DESCRICAO || "---"}</td><td>${c.PONTUACAO || "---"}</td><td><span class="status-badge">${c.STATUS || "Agendado"}</span></td></tr>`;
     });
 }
 
@@ -202,7 +191,7 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-            tr += cabecalhos[index].toUpperCase().includes('TOT') ? `<td><strong>${val}</strong></td>` : `<td>${val}</td>`;
+            tr += cabecalhos[index].toUpperCase().includes('ACUM') || cabecalhos[index].toUpperCase().includes('TOT') ? `<td><strong>${val}</strong></td>` : `<td>${val}</td>`;
         });
         tr += '</tr>';
         tbody.innerHTML += tr;
