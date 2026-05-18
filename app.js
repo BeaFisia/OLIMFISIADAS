@@ -43,7 +43,7 @@ async function carregarDadosAtletas() {
         const response = await fetch('tabela-atletas.csv');
         const data = await response.text();
         renderRankings(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Atletas:", err); }
 }
 
 async function carregarDadosCalendario() {
@@ -51,7 +51,7 @@ async function carregarDadosCalendario() {
         const response = await fetch('tabela-calendario.csv');
         const data = await response.text();
         renderCalendario(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Calendário:", err); }
 }
 
 async function carregarDadosComite() {
@@ -60,7 +60,7 @@ async function carregarDadosComite() {
         if (!response.ok) return;
         const data = await response.text();
         renderComite(csvParaArray(data));
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Comitê:", err); }
 }
 
 async function carregarDadosAtividades() {
@@ -69,7 +69,7 @@ async function carregarDadosAtividades() {
         if (!response.ok) return;
         const data = await response.text();
         renderAtividadesDinamico(data);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Erro Atividades:", err); }
 }
 
 function csvParaArray(txt) {
@@ -84,16 +84,17 @@ function csvParaArray(txt) {
         let obj = {};
         cabecalhoOriginal.forEach((h, i) => {
             let key = h;
+            // MAPEAMENTO INTELIGENTE (Priorizando Integração sobre Pontos)
             if (h.includes('ATL') || h.includes('NOM')) key = 'NOME';
             else if (h.includes('GER') || h.includes('NCIA')) key = 'GERENCIA';
             else if (h.includes('ACUM') || h.includes('TOT')) key = 'TOTAL';
+            else if (h.includes('INT') || h.includes('INTEGRA')) key = 'INTEGRACAO'; // Identifica "Pontos Integração"
             else if (h.includes('DAT')) key = 'DATA';
             else if (h.includes('ATIV')) key = 'ATIVIDADE';
             else if (h.includes('STAT')) key = 'STATUS';
             else if (h.includes('PAP') || h.includes('CARG')) key = 'PAPEL';
             else if (h.includes('DESC') || h.includes('LOC')) key = 'DESCRICAO';
-            else if (h.includes('PONT') && !h.includes('ACUM')) key = 'PONTUACAO';
-            else if (h.includes('INT') || h.includes('INTEGRA')) key = 'INTEGRACAO';
+            else if (h.includes('PONT')) key = 'PONTUACAO'; // Identifica "Pontuação" (Calendário)
 
             let val = valores[i] ? valores[i].trim() : "";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
@@ -124,10 +125,9 @@ function renderRankings(dados) {
         return { nome, media, brasao: imagensBrasoes[nome] || "" };
     });
 
-    // Filtro para a DIR ficar sempre em último
+    // Filtro DIR no final
     const dadosDIR = rankG.find(g => g.nome === "DIR");
     const competitivas = rankG.filter(g => g.nome !== "DIR").sort((a, b) => b.media - a.media);
-    
     const rankFinal = [...competitivas];
     if (dadosDIR) rankFinal.push(dadosDIR);
 
@@ -186,16 +186,12 @@ function renderAtividadesDinamico(csvText) {
     csvText = csvText.replace(/^\uFEFF/, '');
     const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
     if (linhas.length === 0) return;
-
     const thead = document.getElementById('cabecalho-atividades');
     const tbody = document.getElementById('corpo-atividades');
     if (!thead || !tbody) return;
-
     const separador = linhas[0].includes(';') ? ';' : ',';
     const cabecalhos = linhas[0].split(separador).map(h => h.trim());
-
     thead.innerHTML = '<tr>' + cabecalhos.map(h => `<th>${h}</th>`).join('') + '</tr>';
-
     tbody.innerHTML = '';
     for (let i = 1; i < linhas.length; i++) {
         const valores = linhas[i].split(separador);
@@ -203,6 +199,7 @@ function renderAtividadesDinamico(csvText) {
         cabecalhos.forEach((_, index) => {
             let val = valores[index] ? valores[index].trim() : "---";
             if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+            // Bolding para colunas de pontos acumulados ou totais
             if (cabecalhos[index].toUpperCase().includes('ACUM') || cabecalhos[index].toUpperCase().includes('TOT')) {
                 tr += `<td><strong>${val}</strong></td>`;
             } else {
