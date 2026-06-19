@@ -1,61 +1,65 @@
-Atleta;Gerência;TOTAL;INTEGRAÇÃO
-Beatriz Borges;DS&IP;225;30
-Luis Mattos;DS&IP;91;16
-Juan Tobón;DS&IP;4;4
-Camila Fernandes;DS&IP;99;14
-Yan Rodrigues;DS&IP;116;16
-Jacqueline Reis;DS&IP;4;4
-Raissa Pulz;DS&IP;113;18
-Caroline Todesquini;DS&IP;96;26
-Marcella Pioltine;DS&IP;39;14
-Priscila Mileo;DS&IP;0;0
-Marcel Diz;MPO;0;0
-Debora Cristina;MPO;55;10
-Tatiane Vido;MPO;0;0
-Rafael Malta;MPO;14;14
-Vitor Cristofaro;MPO;0;0
-Marcela Rodrigues;MPO;0;0
-Fabricio Cavalcante;MPO;0;0
-Beatriz de Oliveira;MPO;0;0
-Luana Cesar;MPO;0;0
-William Guglielmi;MPO;10;10
-Tania Xavier;MPO;25;10
-Fernando Calixto;MPO;12;12
-Juliana Figueredo;MPO;0;0
-Edmilson Jr;MPO;4;4
-Denis Barbosa;MPO;0;0
-Giullya Midori;NDDC;76;46
-Isabel Ramona;NDDC;118;28
-Dani Voros;NDDC;91;36
-Rayssa Kaoane;NDDC;132;32
-Phillipe Lam Goy;NDDC;154;44
-Tiago Lopes;NDDC;138;38
-Gabriel Pacheco;NDDC;132;32
-Gabriel Armoni;NDDC;52;32
-Caio Moraes;NDDC;145;30
-Luiz Prates;IBP;84;24
-Guilherme Medeiros;IBP;10;10
-Lucas Mendonça;IBP;65;30
-Lugu Szolnoky;IBP;92;52
-Lucas Cardoso;IBP;102;32
-Cadu Ribeiro;IBP;73;38
-Carol Spedo;WHSL;78;28
-Thomas Sena;WHSL;140;30
-Gilvan Junior Oliveira;WHSL;49;4
-André Keidi;WHSL;96;16
-Thiago Forte;NDS;61;16
-Giuliana Filo;NDS;41;16
-Pedro Henrique Meira;NDS;4;4
-Talita Toledo;NDS;4;4
-João Zaghetto;NDS;19;14
-Giovanna Peceguini;NDS;0;0
-Fernanda Nina;NDS;14;14
-Paulo Santos;NDS;14;14
-Vander Fonseca;NDS;0;0
-Helio Henrique;NDS;4;4
-Gabriela Alves;NDS;14;14
-Natan Saraiva;NDS;8;8
-Paulo Oliveira;NDS;69;14
-Jessica Santana;NDS;14;14
-Beatriz Razzini;PRJ;0;0
-Fabio Gomes;DIR;96;26
+Atleta;Gerência;STATUS;TOTAL;INTEGRAÇÃO
+Beatriz Borges;DS&IP;ATIVO;229;34
+Luis Mattos;DS&IP;ATIVO;91;16
+Juan Tobón;DS&IP;ATIVO;4;4
+Camila Fernandes;DS&IP;INATIVO;99;14
+Yan Rodrigues;DS&IP;ATIVO;118;18
+Jacqueline Reis;DS&IP;ATIVO;8;8
+Raissa Pulz;DS&IP;INATIVO;113;18
+Caroline Todesquini;DS&IP;ATIVO;96;26
+Marcella Pioltine;DS&IP;ATIVO;39;14
+Priscila Mileo;DS&IP;ATIVO;0;0
+Marcel Diz;MPO;ATIVO;0;0
+Debora Cristina;MPO;ATIVO;55;10
+Tatiane Vido;MPO;ATIVO;0;0
+Rafael Malta;MPO;ATIVO;20;20
+Vitor Cristofaro;MPO;ATIVO;0;0
+Marcela Rodrigues;MPO;ATIVO;0;0
+Fabricio Cavalcante;MPO;ATIVO;0;0
+Beatriz de Oliveira;MPO;ATIVO;0;0
+Luana Cesar ;MPO;ATIVO;0;0
+William Guglielmi;MPO;ATIVO;10;10
+Tania Xavier;MPO;ATIVO;25;10
+Fernando Calixto;MPO;ATIVO;12;12
+Juliana Figueredo;MPO;ATIVO;0;0
+Edmilson Jr;MPO;ATIVO;4;4
+Denis Barbosa;MPO;ATIVO;0;0
+Mayara Marques;MPO;INATIVO;4;4
+Giullya Midori;NDDC;ATIVO;78;48
+Isabel Ramona;NDDC;ATIVO;124;34
+Dani Voros;NDDC;ATIVO;95;40
+Rayssa Kaoane;NDDC;ATIVO;156;36
+Phillipe Lam Goy;NDDC;ATIVO;154;44
+Tiago Lopes;NDDC;ATIVO;147;42
+Gabriel Pacheco;NDDC;ATIVO;132;32
+Gabriel Armoni;NDDC;ATIVO;52;32
+Caio Moraes;NDDC;ATIVO;184;34
+Luiz Prates;IBP;ATIVO;138;28
+Guilherme Medeiros;IBP;ATIVO;56;16
+Lucas Mendonça;IBP;ATIVO;69;34
+Lugu Szolnoky;IBP;ATIVO;98;58
+Lucas Cardoso;IBP;ATIVO;121;36
+Cadu Ribeiro;IBP;ATIVO;77;42
+Carol Spedo;WHSL;ATIVO;82;32
+Thomas Sena;WHSL;ATIVO;144;34
+Gilvan Junior Oliveira;WHSL;ATIVO;49;4
+André Keidi;WHSL;ATIVO;96;16
+Alberto Montenegro;WHSL;INATIVO;2;2
+Thiago Forte;NDS;ATIVO;110;20
+Giuliana Filo;NDS;ATIVO;41;16
+Pedro Henrique Meira;NDS;INATIVO;4;4
+Talita Toledo;NDS;ATIVO;8;8
+João Zaghetto;NDS;ATIVO;33;18
+Giovanna Peceguini;NDS;ATIVO;4;4
+Fernanda Nina;NDS;ATIVO;43;18
+Paulo Santos;NDS;ATIVO;48;18
+Vander Fonseca;NDS;ATIVO;0;0
+Helio Henrique;NDS;ATIVO;8;8
+Gabriela Alves;NDS;ATIVO;18;18
+Natan Saraiva;NDS;INATIVO;8;8
+Paulo Oliveira;NDS;ATIVO;73;18
+Jessica Santana;NDS;ATIVO;18;18
+Beatriz Razzini;PRJ;ATIVO;0;0
+Fabio Gomes;DIR;ATIVO;96;26
+Beatriz Razzini;PRJ;INATIVO;0;0
+Fabio Gomes;DIR;ATIVO;96;26

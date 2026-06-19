@@ -1,61 +1,63 @@
-ATLETA;AREA;ATLETAS ATIVOS;Basquete - Participação;Basquete - Vencedor;Equilibra&Corre - Participação;Equilibra&Corre- Vencedor;Gymrats- Participação;Gymrats- Vencedor
-Beatriz Borges;DS&IP;10;4;45;4;50;10;100
-Luis Mattos;DS&IP;10;4;50;0;0;10;25
-Juan Tobón;DS&IP;10;4;0;0;0;0;0
-Camila Fernandes;DS&IP;10;4;0;0;0;10;85
-Yan Rodrigues;DS&IP;10;0;0;4;0;10;100
-Jacqueline Reis;DS&IP;10;4;0;0;0;0;0
-Raissa Pulz;DS&IP;10;0;0;4;0;10;95
-Caroline Todesquini;DS&IP;10;4;0;0;15;10;55
-Marcella Ferro;DS&IP;10;0;0;4;25;0;0
-Priscila Mileo;DS&IP;10;0;0;0;0;0;0
-Marcel Diz;MPO;15;0;0;0;0;0;0
-Debora Cristina;MPO;15;0;0;0;0;10;45
-Tatiane Vido;MPO;15;0;0;0;0;0;0
-Rafael Malta;MPO;15;0;0;0;0;0;0
-Vitor Cristofaro;MPO;15;0;0;0;0;0;0
-Marcela Rodrigues;MPO;15;0;0;0;0;0;0
-Fabricio Cavalcante;MPO;15;0;0;0;0;0;0
-Beatriz de Oliveira;MPO;15;0;0;0;0;0;0
-Luana Cesar ;MPO;15;0;0;0;0;0;0
-William Guglielmi;MPO;15;0;0;0;0;0;0
-Tania Xavier;MPO;15;0;0;0;0;10;15
-Fernando Calixto;MPO;15;0;0;0;0;0;0
-Juliana Figueredo;MPO;15;0;0;0;0;0;0
-Edmilson Jr;MPO;15;4;0;0;0;0;0
-Denis Barbosa;MPO;15;0;0;0;0;0;0
-Giullya Midori;NDDC;9;4;0;0;0;10;30
-Isabel Ramona;NDDC;9;0;0;0;0;10;90
-Dani Voros;NDDC;9;4;0;4;45;10;10
-Rayssa Kaoane;NDDC;9;4;0;4;30;10;70
-Phillipe Lam Goy;NDDC;9;4;0;4;35;10;75
-Tiago Lopes;NDDC;9;0;0;4;20;10;80
-Gabriel Pacheco;NDDC;9;4;0;4;0;10;100
-Gabriel Armoni;NDDC;9;4;0;4;0;10;20
-Caio Moraes;NDDC;9;4;45;0;0;10;70
-Luiz Prates;IBP;6;0;0;0;0;10;60
-Guilherme Medeiros;IBP;6;4;0;0;0;0;0
-Lucas Mendonça;IBP;6;4;0;4;10;10;25
-Lugu Szolnoky;IBP;6;4;0;0;0;10;40
-Lucas Cardoso;IBP;6;4;0;4;5;10;65
-Cadu Ribeiro;IBP;6;0;0;4;0;10;35
-Carol Spedo;WHSL;4;4;0;0;0;10;50
-Thomas Sena;WHSL;4;4;45;4;40;10;25
-Gilvan Junior Oliveira;WHSL;4;4;45;0;0;0;0
-André Keidi;WHSL;4;4;0;0;0;10;80
-Thiago Forte;NDS;14;4;45;0;0;0;0
-Giuliana Filo;NDS;14;4;0;0;0;10;25
-Pedro Henrique Meira;NDS;14;4;0;0;0;0;0
-Talita Toledo;NDS;14;4;0;0;0;0;0
-João Zaghetto;NDS;14;4;0;0;0;10;5
-Giovanna Peceguini;NDS;14;0;0;0;0;0;0
-Fernanda Yamauchi;NDS;14;4;0;0;0;0;0
-Paulo Santos;NDS;14;4;0;0;0;0;0
-Vander Fonseca;NDS;14;0;0;0;0;0;0
-Helio Henrique;NDS;14;4;0;0;0;0;0
-Gabriela Alves;NDS;14;4;0;0;0;0;0
-Natan Saraiva;NDS;14;4;0;0;0;0;0
-Paulo Oliveira;NDS;14;4;45;0;0;10;10
-Jessica Santana;NDS;14;4;0;0;0;0;0
-Beatriz Razzini;PRJ;1;0;0;0;0;0;0
-Fabio Gomes;DIR;1;4;45;0;0;10;25
+ATLETA;AREA;Basquete - Participação;Basquete - Vencedor;Equilibra&Corre - Participação;Equilibra&Corre- Vencedor;Gymrats- Participação;Gymrats- Vencedor;Kahoot - Participação;Kahoot - Vencedor
+Beatriz Borges;DS&IP;4;45;4;50;10;100;4;0
+Luis Mattos;DS&IP;4;50;0;0;10;25;0;0
+Juan Tobón;DS&IP;4;0;0;0;0;0;0;0
+Camila Fernandes;DS&IP;4;0;0;0;10;85;0;0
+Yan Rodrigues;DS&IP;0;0;4;0;10;100;0;0
+Jacqueline Reis;DS&IP;4;0;0;0;0;0;4;0
+Raissa Pulz;DS&IP;0;0;4;0;10;95;0;0
+Caroline Todesquini;DS&IP;4;0;0;15;10;55;0;0
+Marcella Pioltine;DS&IP;0;0;4;25;0;0;0;0
+Priscila Mileo;DS&IP;0;0;0;0;0;0;4;0
+Marcel Diz;MPO;0;0;0;0;0;0;0;0
+Debora Cristina;MPO;0;0;0;0;10;45;0;0
+Tatiane Vido;MPO;0;0;0;0;0;0;0;0
+Rafael Malta;MPO;0;0;0;0;0;0;0;0
+Vitor Cristofaro;MPO;0;0;0;0;0;0;0;0
+Mayara Marques;MPO;4;0;0;0;0;0;0;0
+Marcela Rodrigues;MPO;0;0;0;0;0;0;0;0
+Fabricio Cavalcante;MPO;0;0;0;0;0;0;0;0
+Beatriz de Oliveira;MPO;0;0;0;0;0;0;0;0
+Luana Cesar ;MPO;0;0;0;0;0;0;0;0
+William Guglielmi;MPO;0;0;0;0;0;0;0;0
+Tania Xavier;MPO;0;0;0;0;10;15;0;0
+Fernando Calixto;MPO;0;0;0;0;0;0;0;0
+Juliana Figueredo;MPO;0;0;0;0;0;0;0;0
+Edmilson Jr;MPO;4;0;0;0;0;0;0;0
+Denis Barbosa;MPO;0;0;0;0;0;0;0;0
+Giullya Midori;NDDC;4;0;0;0;10;30;0;0
+Isabel Ramona;NDDC;0;0;0;0;10;90;4;0
+Dani Voros;NDDC;4;0;4;45;10;10;0;0
+Rayssa Kaoane;NDDC;4;0;4;30;10;70;4;20
+Phillipe Lam Goy;NDDC;4;0;4;35;10;75;0;0
+Tiago Lopes;NDDC;0;0;4;20;10;80;4;5
+Gabriel Pacheco;NDDC;4;0;4;0;10;100;0;0
+Gabriel Armoni;NDDC;4;0;4;0;10;20;0;0
+Caio Moraes;NDDC;4;45;0;0;10;70;4;35
+Luiz Prates;IBP;0;0;0;0;10;60;4;50
+Guilherme Medeiros;IBP;4;0;0;0;0;0;4;40
+Lucas Mendonça;IBP;4;0;4;10;10;25;0;0
+Lugu Szolnoky;IBP;4;0;0;0;10;40;0;0
+Lucas Cardoso;IBP;4;0;4;5;10;65;4;15
+Cadu Ribeiro;IBP;0;0;4;0;10;35;4;0
+Carol Spedo;WHSL;4;0;0;0;10;50;4;0
+Thomas Sena;WHSL;4;45;4;40;10;25;4;0
+Gilvan Junior Oliveira;WHSL;4;45;0;0;0;0;0;0
+André Keidi;WHSL;4;0;0;0;10;80;0;0
+Alberto Montenegro;WHSL;0;0;0;0;0;0;0;0
+Thiago Forte;NDS;4;45;0;0;0;0;4;45
+Giuliana Filo;NDS;4;0;0;0;10;25;0;0
+Pedro Henrique Meira;NDS;4;0;0;0;0;0;0;0
+Talita Toledo;NDS;4;0;0;0;0;0;4;0
+João Zaghetto;NDS;4;0;0;0;10;5;4;10
+Giovanna Peceguini;NDS;0;0;0;0;0;0;4;0
+Fernanda Nina;NDS;4;0;0;0;0;0;4;25
+Paulo Santos;NDS;4;0;0;0;0;0;4;30
+Vander Fonseca;NDS;0;0;0;0;0;0;0;0
+Helio Henrique;NDS;4;0;0;0;0;0;4;0
+Gabriela Alves;NDS;4;0;0;0;0;0;4;0
+Natan Saraiva;NDS;4;0;0;0;0;0;0;0
+Paulo Oliveira;NDS;4;45;0;0;10;10;4;0
+Jessica Santana;NDS;4;0;0;0;0;0;4;0
+Beatriz Razzini;PRJ;0;0;0;0;0;0;0;0
+Fabio Gomes;DIR;4;45;0;0;10;25;0;0
