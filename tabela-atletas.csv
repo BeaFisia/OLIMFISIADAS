@@ -1,10 +1,10 @@
 Atleta;Gerência;STATUS;TOTAL;INTEGRAÇÃO
-Beatriz Borges;DS&IP;ATIVO;229;34
-Luis Mattos;DS&IP;ATIVO;91;16
-Juan Tobón;DS&IP;ATIVO;4;4
+Beatriz Borges;DS&IP;ATIVO;238;38
+Luis Mattos;DS&IP;ATIVO;130;20
+Juan Tobón;DS&IP;ATIVO;33;8
 Camila Fernandes;DS&IP;INATIVO;99;14
 Yan Rodrigues;DS&IP;ATIVO;118;18
-Jacqueline Reis;DS&IP;ATIVO;8;8
+Jacqueline Reis;DS&IP;ATIVO;10;10
 Raissa Pulz;DS&IP;INATIVO;113;18
 Caroline Todesquini;DS&IP;ATIVO;96;26
 Marcella Pioltine;DS&IP;ATIVO;39;14
@@ -18,48 +18,46 @@ Marcela Rodrigues;MPO;ATIVO;0;0
 Fabricio Cavalcante;MPO;ATIVO;0;0
 Beatriz de Oliveira;MPO;ATIVO;0;0
 Luana Cesar ;MPO;ATIVO;0;0
-William Guglielmi;MPO;ATIVO;10;10
+William Guglielmi;MPO;ATIVO;54;14
 Tania Xavier;MPO;ATIVO;25;10
-Fernando Calixto;MPO;ATIVO;12;12
+Fernando Calixto;MPO;ATIVO;41;16
 Juliana Figueredo;MPO;ATIVO;0;0
 Edmilson Jr;MPO;ATIVO;4;4
 Denis Barbosa;MPO;ATIVO;0;0
 Mayara Marques;MPO;INATIVO;4;4
-Giullya Midori;NDDC;ATIVO;78;48
+Giullya Midori;NDDC;ATIVO;107;52
 Isabel Ramona;NDDC;ATIVO;124;34
-Dani Voros;NDDC;ATIVO;95;40
-Rayssa Kaoane;NDDC;ATIVO;156;36
-Phillipe Lam Goy;NDDC;ATIVO;154;44
-Tiago Lopes;NDDC;ATIVO;147;42
-Gabriel Pacheco;NDDC;ATIVO;132;32
+Dani Voros;NDDC;ATIVO;108;48
+Rayssa Kaoane;NDDC;ATIVO;165;40
+Phillipe Lam Goy;NDDC;ATIVO;163;48
+Tiago Lopes;NDDC;ATIVO;181;46
+Gabriel Pacheco;NDDC;ATIVO;156;36
 Gabriel Armoni;NDDC;ATIVO;52;32
-Caio Moraes;NDDC;ATIVO;184;34
-Luiz Prates;IBP;ATIVO;138;28
-Guilherme Medeiros;IBP;ATIVO;56;16
-Lucas Mendonça;IBP;ATIVO;69;34
-Lugu Szolnoky;IBP;ATIVO;98;58
-Lucas Cardoso;IBP;ATIVO;121;36
-Cadu Ribeiro;IBP;ATIVO;77;42
-Carol Spedo;WHSL;ATIVO;82;32
-Thomas Sena;WHSL;ATIVO;144;34
+Caio Moraes;NDDC;ATIVO;203;38
+Luiz Prates;IBP;ATIVO;140;30
+Guilherme Medeiros;IBP;ATIVO;67;22
+Lucas Mendonça;IBP;ATIVO;75;40
+Lugu Szolnoky;IBP;ATIVO;149;64
+Lucas Cardoso;IBP;ATIVO;147;42
+Cadu Ribeiro;IBP;ATIVO;111;56
+Carol Spedo;WHSL;ATIVO;101;46
+Thomas Sena;WHSL;ATIVO;208;48
 Gilvan Junior Oliveira;WHSL;ATIVO;49;4
-André Keidi;WHSL;ATIVO;96;16
+André Keidi;WHSL;ATIVO;129;24
 Alberto Montenegro;WHSL;INATIVO;2;2
 Thiago Forte;NDS;ATIVO;110;20
 Giuliana Filo;NDS;ATIVO;41;16
 Pedro Henrique Meira;NDS;INATIVO;4;4
 Talita Toledo;NDS;ATIVO;8;8
-João Zaghetto;NDS;ATIVO;33;18
-Giovanna Peceguini;NDS;ATIVO;4;4
-Fernanda Nina;NDS;ATIVO;43;18
-Paulo Santos;NDS;ATIVO;48;18
+João Zaghetto;NDS;ATIVO;67;22
+Giovanna Peceguini;NDS;ATIVO;6;6
+Fernanda Nina;NDS;ATIVO;51;26
+Paulo Santos;NDS;ATIVO;62;22
 Vander Fonseca;NDS;ATIVO;0;0
-Helio Henrique;NDS;ATIVO;8;8
+Helio Henrique;NDS;ATIVO;17;12
 Gabriela Alves;NDS;ATIVO;18;18
 Natan Saraiva;NDS;INATIVO;8;8
 Paulo Oliveira;NDS;ATIVO;73;18
 Jessica Santana;NDS;ATIVO;18;18
 Beatriz Razzini;PRJ;ATIVO;0;0
-Fabio Gomes;DIR;ATIVO;96;26
-Beatriz Razzini;PRJ;INATIVO;0;0
 Fabio Gomes;DIR;ATIVO;96;26
